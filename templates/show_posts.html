@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block body %}
+  <ul class=posts>
+  {% for post in posts %}
+    <li><h2><a href="/post/{{post.shortcode}}">{{ post.title }}</a></h2>
+  {% else %}
+    <li><em>Unbelievable.  No posts here so far</em>
+  {% endfor %}
+  </ul>
+{% endblock %}

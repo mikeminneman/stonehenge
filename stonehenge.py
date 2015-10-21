@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request, render_template
 app = Flask(__name__)
 
 # Console Copy Start
@@ -27,8 +27,9 @@ def pageNotFound(error):
 	return "500: "+str(error)
 	
 @app.route('/')
-def hello_world():
-	return 'Hello World!'
+def display_index():
+	posts=session.query(Posts).limit(100).all()
+	return render_template('show_posts.html',posts=posts)
 	
 @app.route('/post/<int:post_id>')
 @app.route('/id/<int:post_id>')

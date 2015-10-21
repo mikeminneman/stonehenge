@@ -125,34 +125,22 @@ def des3decryptcbc(post_content,key,iv):
 	return pt
 
 def display_post(post):
-	returnstring  = "<html>\n"
-	returnstring += "<head><title>"+post.shortcode+" "+post.title+"</title>\n"
-	returnstring += "<body style='font-family: monospace;'>\n"
-	returnstring += "Id: "+str(post.id)+"<br />\n"
-	returnstring += "Link: <a href='"+post.link+"'>"+post.link+"</a><br />\n"
-	returnstring += "Autologger: <a href='"+get_soulsphere(post.shortcode)+"'>"+get_soulsphere(post.shortcode)+"</a><br />\n"
-	returnstring += "Wiki: <a href='"+get_redditwiki(post.title)+"'>"+get_redditwiki(post.title)+"</a><br />\n"
-	returnstring += "Shortcode: "+post.shortcode+"<br />\n"
-	returnstring += "Title: "+post.title+"<br /><br />\n"
-	returnstring += "Content: <br />\n"+str(post.content)+"<br /><br />\n"
-	post_unhex = unhex(post.content)
-	returnstring += "Unhexed: <br />\n"+post_unhex+"<br /><br />\n"
-	post_unb64 = unb64(post_unhex)
-	post_unb64_ascii = unb64codec(post_unb64, 'ascii')
-	post_unb64_utf8 = unb64codec(post_unb64, 'utf-8')
-	returnstring += "Base 64 Decode as ASCII: <br />\n"+post_unb64_ascii+"<br /><br />\n"
-	returnstring += "Base 64 Decode as ASCII and Unhexed: <br />\n"+unhex(post_unb64_ascii)+"<br /><br />\n"
-	returnstring += "Base 64 Decode as UTF-8: <br />\n"+post_unb64_utf8+"<br /><br />\n"
-	post_b64 = b64(post.content)
+	post.soulsphere = get_soulsphere(post.shortcode)
+	post.redditwiki = get_redditwiki(post.title)
+	post.unhex = unhex(post.content)
+	post.unb64 = unb64(post.unhex)
+	post.unb64_ascii = unb64codec(post.unb64,'ascii')
+	post.unb64_ascii_unhex = unhex(post.unb64_ascii)
+	post.unb64_utf8 = unb64codec(post.unb64, 'utf-8')
+	post.b64 = b64(post.content)
 	md5a858 = "34a14a42e98ff96095af56604e290cae"
 	md5a858des3 = des3decrypt(post.content,md5a858)
 	md5a858des3cbc = des3decryptcbc(post.content,md5a858,"0000000000000000")
-	returnstring += "A858 DES-EDE-ECB as ASCII: <br />\n"+unb64codec(md5a858des3,'ascii')+"<br /><br />\n"
-	returnstring += "A858 DES-EDE-ECB as UTF-8: <br />\n"+unb64codec(md5a858des3,'utf-8')+"<br /><br />\n"
-	returnstring += "A858 DES-EDE-CBC with IV 0: <br />\n"+str(md5a858des3cbc)+"<br /><br />\n"
-	returnstring += "Images: <br />\n<img src='data:image/gif;base64,"+post_b64+"' /><br /><br />\n"
-	returnstring += "</body>\n</html>\n"
-	return returnstring
+	post.md5a858des3 = md5a858des3
+	post.md5a858des3_ascii = unb64codec(md5a858des3,'ascii')
+	post.md5a858des3_utf8 = unb64codec(md5a858des3,'utf8')
+	post.md5a858des3cbc = str(md5a858des3cbc)
+	return render_template('show_one_post.html',post=post)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')

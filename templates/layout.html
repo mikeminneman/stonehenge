@@ -1,10 +1,20 @@
 <!doctype html>
+<head>
 <title>A858 Analysis</title>
-<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
-<div class=page>
-  <h1>A858 Project Stonehenge</h1>
-  <div class=metanav>
-  There's no nav
+<link rel=stylesheet type=text/css href="/static/css/bootstrap.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body style="padding-top:70px;">
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+	<div class="navbar-header">
+		<a href="/" class="navbar-brand">A858 Project Stonehenge</a>
+		<p class="navbar-text">Decryption</p>
+	</div>
   </div>
+</nav>
+<div class="container">
   {% block body %}{% endblock %}
 </div>
+</body>
+</html>

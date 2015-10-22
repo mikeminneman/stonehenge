@@ -14,12 +14,6 @@ Base.prepare(engine, reflect=True)
 Posts = Base.classes.posts
 session = Session(engine)
 
-import re
-import binascii
-import base64
-from Crypto.Cipher import DES3
-from Crypto.Hash import MD5
-
 from shdecoders import *
 # Console Copy End
 
@@ -68,16 +62,14 @@ def display_post(post):
 	post.redditwiki = get_redditwiki(post.title)
 	post.unhex = unhex(post.content)
 	post.unb64 = unb64(post.unhex)
-	post.unb64_ascii = unb64codec(post.unb64,'ascii')
-	post.unb64_ascii_unhex = unhex(post.unb64_ascii)
 	post.unb64_utf8 = unb64codec(post.unb64, 'utf-8')
+	#post.unb64_utf8_unhex = unhex(post.unb64_utf8)
 	post.b64 = b64(post.content)
 	md5a858 = "34a14a42e98ff96095af56604e290cae"
 	md5a858des3 = des3decrypt(post.content,md5a858)
 	md5a858des3cbc = des3decryptcbc(post.content,md5a858,"0000000000000000")
 	post.md5a858des3 = md5a858des3
-	post.md5a858des3_ascii = unb64codec(md5a858des3,'ascii')
-	post.md5a858des3_utf8 = unb64codec(md5a858des3,'utf8')
+	post.md5a858des3_utf8 = unb64codec(md5a858des3,'utf-8')
 	post.md5a858des3cbc = str(md5a858des3cbc)
 	return render_template('show_one_post.html',post=post)
 

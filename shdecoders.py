@@ -69,7 +69,14 @@ def decode_des3_ecb(ct, key): # takes values, returns value
 def decode_des3_cbc(ct, key, iv): # takes values, returns value
 	d = DES3.new(key,DES3.MODE_CBC, iv)
 	return d.decrypt(ct)
-	
+
+def add_n_after_20(text): # returns string
+	result = ""
+	for i in range(0, len(text)):
+		result+=text[i]
+		if (i+1)%20 == 0:
+			result+='\n'
+	return result
 	
 	
 #Legacy

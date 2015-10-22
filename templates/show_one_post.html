@@ -1,12 +1,12 @@
 {% extends "layout.html" %}
 {% block body %}
-  <div name="content" style="font-family: monospace;">
+  <div name="content" style="font-family: monospace; overflow-wrap: break-word; white-space: pre-line">
 	Id: {{post.id}}<br />
 	Link: <a href='{{post.link}}'>{{post.link}}</a><br />
 	Autologger: <a href='{{post.soulsphere}}'>{{post.soulsphere}}</a><br />
 	Wiki: <a href='{{post.redditwiki}}'>{{post.redditwiki}}</a><br />
 	Shortcode: {{post.shortcode}}<br />
-	Title: {{post.title}}<br />
+	Title: {{post.title}}<br /><br />
 	Content: <br />{{post.content}}<br /><br />
 	Unhexed: <br />{{post.unhex}}<br /><br />
 	Base 64 Decode as UTF-8: <br />{{post.unb64_utf8}}<br /><br />
@@ -15,4 +15,6 @@
 	A858 DES-EDE-CBC with IV 0: <br />{{post.md5a858des3cbc}}<br /><br />
 	Images: <br /><img src='data:image/gif;base64,{{post.b64}}' /><br /><br />
   </div>
+  <script type="text/javascript">
+  </script>
 {% endblock %}

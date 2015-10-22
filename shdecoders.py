@@ -82,6 +82,14 @@ def add_n_after_20(text): # returns string
 def utf2ascii(text): # returns text
 	return unidecode(text)
 	
+def get_first8(val): # returns value
+	return val[:8]
+
+def remove_first8(val): # returns value
+	return val[len(val)-8:]
+	
+	
+
 	
 #Legacy
 

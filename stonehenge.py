@@ -71,7 +71,7 @@ def display_post(post):
 	md5a858des3cbc = des3decryptcbc(post.content,md5a858,"0000000000000000")
 	post.md5a858des3 = md5a858des3
 	post.md5a858des3_utf8 = unb64codec(md5a858des3,'utf-8')
-	post.md5a858des3cbc = str(md5a858des3cbc)
+	post.md5a858des3cbc = str(md5a858des3cbc,encoding='utf-8',errors='replace')
 	return render_template('show_one_post.html',post=post)
 
 if __name__ == '__main__':

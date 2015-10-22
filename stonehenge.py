@@ -63,6 +63,7 @@ def display_post(post):
 	post.unhex = unhex(post.content)
 	post.unb64 = unb64(post.unhex)
 	post.unb64_utf8 = unb64codec(post.unb64, 'utf-8')
+	#post.unb64_utf8_ascii = utf2ascii(post.unb64_utf8)
 	post.unb64_utf8_unhex = unhex(post.unb64_utf8)
 	post.b64 = b64(post.content)
 	md5a858 = "34a14a42e98ff96095af56604e290cae"

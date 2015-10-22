@@ -1,4 +1,5 @@
 import string
+from unidecode import unidecode
 import re
 import binascii
 import base64
@@ -77,6 +78,9 @@ def add_n_after_20(text): # returns string
 		if (i+1)%20 == 0:
 			result+='\n'
 	return result
+	
+def utf2ascii(text): # returns text
+	return unidecode(text)
 	
 	
 #Legacy

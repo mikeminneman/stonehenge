@@ -2,3 +2,7 @@ config.py
 __pycache__/config.cpython-33.pyc
 __pycache__/shdecoders.cpython-33.pyc
 __pycache__/shdecoders.cpython-33.pyc
+__pycache__/decoders.cpython-33.pyc
+__pycache__/detectors.cpython-33.pyc
+__pycache__/shdecoders.cpython-33.pyc
+__pycache__/solve.cpython-33.pyc

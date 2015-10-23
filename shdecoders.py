@@ -6,6 +6,8 @@ import base64
 from Crypto.Cipher import DES3
 from Crypto.Hash import MD5
 
+#from solve import *
+
 def detect_spaces(text): # returns boolean
 	return (' ' in text)
 

@@ -32,9 +32,10 @@ def show_title(post_title):
 	return display_post(post)
 
 def display_post(post):
+	post.shortcode = get_shortcode(post.link) if not(hasattr(post, 'shortcode')) else post.shortcode
+	post.length = get_length(post.content) if not(hasattr(post, 'length')) else post.length
 	post.soulsphere = get_soulsphere(post.shortcode)
 	post.redditwiki = get_redditwiki(post.title)
-	post.length = get_length(post.content)
 	post.unhex = unhex(post.content)
 	post.unb64 = unb64(post.unhex)
 	post.unb64_utf8 = unb64codec(post.unb64, 'utf-8')

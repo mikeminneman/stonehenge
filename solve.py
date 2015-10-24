@@ -73,7 +73,7 @@ def decode(content, method):
 	if method=="decode_base64":
 		return decode_base64(content)
 	if method=="solved":
-		return decode_utf8(content)
+		return content
 	return ""
 	
 	

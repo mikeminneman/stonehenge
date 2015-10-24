@@ -52,6 +52,10 @@ def display_post(post):
 	except:
 		post.md5a858des3cbc = md5a858des3cbc
 		pass
+	recursiveapproach = find_approach(post.content)
+	recursivesolution = solve(post.content,recursiveapproach)
+	post.recursiveapproach = str(recursiveapproach)
+	post.recursivesolution = str(recursivesolution,encoding='utf-8',errors='replace')
 	return render_template('show_one_post.html',post=post)
 
 if __name__ == '__main__':

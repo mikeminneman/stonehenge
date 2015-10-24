@@ -1,7 +1,6 @@
 from flask import Flask, request, render_template
 app = Flask(__name__)
 
-# Console Copy Start
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine
@@ -17,8 +16,18 @@ session = Session(engine)
 from shdecoders import *
 from shinfo import *
 
-# Console Copy End
-
+def getbyid(post_id):
+	post=session.query(Posts).filter_by(id=post_id).first()
+	return post
+	
+def getbyshortcode(post_shortcode):
+	post=session.query(Posts).filter_by(shortcode=post_shortcode).first()
+	return post
+	
+def getbytitle(post_title):
+	post=session.query(Posts).filter_by(title=post_title).first()
+	return post
+	
 @app.errorhandler(500)
 def pageNotFound(error):
 	print(error)
@@ -32,18 +41,18 @@ def display_index():
 @app.route('/post/<int:post_id>')
 @app.route('/id/<int:post_id>')
 def show_id(post_id):
-	post=session.query(Posts).filter_by(id=post_id).first()
+	post=getbyid(post_id)
 	return display_post(post)
 
 @app.route('/post/<string:post_shortcode>')
 @app.route('/shortcode/<string:post_shortcode>')
 def show_shortcode(post_shortcode):
-	post=session.query(Posts).filter_by(shortcode=post_shortcode).first()
+	post=getbyshortcode(post_shortcode)
 	return display_post(post)
 
 @app.route('/title/<string:post_title>')
 def show_title(post_title):
-	post=session.query(Posts).filter_by(title=post_title).first()
+	post=getbytitle(post_title)
 	return display_post(post)
 
 def display_post(post):

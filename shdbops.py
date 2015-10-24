@@ -33,4 +33,21 @@ def getallposts():
 	return posts
 	
 def populate_shortcodes():
+	posts=getallposts()
+	for post in posts:
+		if hasattr(post, 'shortcode'):
+			post.shortcode = get_shortcode(post.link)
+		else:
+			return False
+	session.commit()
+	return True
+	
+def populate_lengths():
+	posts=getallposts()
+	for post in posts:
+		if hasattr(post, 'length'):
+			post.length = get_length(post.content)
+		else:
+			return False
+	session.commit()
 	return True

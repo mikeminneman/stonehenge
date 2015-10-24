@@ -49,6 +49,14 @@ def get_shortcode(post_link):
 	shortcode = "" if shortcodematch == None else shortcodematch.group(1)
 	return shortcode
 	
+def get_length(post_content):
+	try:
+		length = len(post_content.replace(" ",""))
+	except:
+		length = 0
+		pass
+	return length
+	
 def get_soulsphere(post_shortcode):
 	soulsphere_start = "http://a858.soulsphere.org/?id="
 	return soulsphere_start+post_shortcode
@@ -60,6 +68,7 @@ def get_redditwiki(post_title):
 def display_post(post):
 	post.soulsphere = get_soulsphere(post.shortcode)
 	post.redditwiki = get_redditwiki(post.title)
+	post.length = get_length(post.content)
 	post.unhex = unhex(post.content)
 	post.unb64 = unb64(post.unhex)
 	post.unb64_utf8 = unb64codec(post.unb64, 'utf-8')
@@ -71,7 +80,11 @@ def display_post(post):
 	md5a858des3cbc = des3decryptcbc(post.content,md5a858,"0000000000000000")
 	post.md5a858des3 = md5a858des3
 	post.md5a858des3_utf8 = unb64codec(md5a858des3,'utf-8')
-	post.md5a858des3cbc = str(md5a858des3cbc,encoding='utf-8',errors='replace')
+	try:
+		post.md5a858des3cbc = str(md5a858des3cbc,encoding='utf-8',errors='replace')
+	except:
+		post.md5a858des3cbc = md5a858des3cbc
+		pass
 	return render_template('show_one_post.html',post=post)
 
 if __name__ == '__main__':

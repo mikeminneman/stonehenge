@@ -1,33 +1,9 @@
 from flask import Flask, request, render_template
 app = Flask(__name__)
 
-from sqlalchemy.ext.automap import automap_base
-from sqlalchemy.orm import Session
-from sqlalchemy import create_engine
-
-import config
-
-Base = automap_base()
-engine = create_engine(config.pgsql["string"])
-Base.prepare(engine, reflect=True)
-Posts = Base.classes.posts
-session = Session(engine)
-
 from shdecoders import *
-from shinfo import *
+from shdbops import *
 
-def getbyid(post_id):
-	post=session.query(Posts).filter_by(id=post_id).first()
-	return post
-	
-def getbyshortcode(post_shortcode):
-	post=session.query(Posts).filter_by(shortcode=post_shortcode).first()
-	return post
-	
-def getbytitle(post_title):
-	post=session.query(Posts).filter_by(title=post_title).first()
-	return post
-	
 @app.errorhandler(500)
 def pageNotFound(error):
 	print(error)
@@ -35,7 +11,7 @@ def pageNotFound(error):
 	
 @app.route('/')
 def display_index():
-	posts=session.query(Posts).limit(100).all()
+	posts=getlimitedposts(100)
 	return render_template('show_posts.html',posts=posts)
 	
 @app.route('/post/<int:post_id>')

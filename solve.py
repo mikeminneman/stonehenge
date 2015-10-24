@@ -1,29 +1,35 @@
 from detectors import *
 from decoders import *
 
-def find_approach(content):
+def find_approach(content,l=0):
+	nl=l+1
 	if type(content)==str:
 		content=content.encode('utf-8')
 	types = detect(content)	
 	methods = lookup_method(types)
+	print(str(l)+indent(l)+" Types: "+str(types))
+	print(str(l)+indent(l)+" Methods: "+str(methods))
 	if methods==[]:
 		approach = []
 	else:
 		for method in methods:
+			print(str(l)+indent(l)+" Working with method: "+method)
 			if method == "solved":
 				approach = ["solved"]
-				return approach
+				break
 			else:
 				newcontent = decode(content, method)
 				if newcontent == "":
 					approach = []
 				else:
-					newapproach = find_approach(newcontent)
-					if len(newapproach)>1 and newapproach[len(newapproach)-1]=="solved":
+					newapproach = find_approach(newcontent,nl)
+					print(str(l)+indent(l)+" New approach: "+str(newapproach))
+					if len(newapproach)>0 and newapproach[len(newapproach)-1]=="solved":
 						approach = [method]+newapproach
-						return approach
+						break
 					else:
 						approach = [method]+newapproach #does not matter
+	print(str(l)+indent(l)+ " Returning: "+str(approach))
 	return approach
 	
 def solve(content, approach):
@@ -35,18 +41,49 @@ def solve(content, approach):
 	return solution
 	
 def detect(content):
+	types = []
 	if detect_hex_w_spaces(content):
-		return ["hex_w_spaces"]
-	return []
+		types.append("hex_w_spaces")
+	if detect_hex(content):
+		types.append("hex")
+	if detect_base64(content):
+		types.append("base64")
+	if detect_utf8(content):
+		types.append("utf8")
+	return types
 
 def lookup_method(types):
 	methods=[]
 	for type in types:
 		if type=="hex_w_spaces":
 			methods.append("remove_spaces")
+		if type=="hex":
+			methods.append("decode_hex")
+		if type=="base64":
+			methods.append("decode_base64")
+		if type=="utf8":
+			methods.append("solved")
 	return methods
 	
 def decode(content, method):
 	if method=="remove_spaces":
 		return remove_spaces(content)
+	if method=="decode_hex":
+		return decode_hex(content)
+	if method=="decode_base64":
+		return decode_base64(content)
+	if method=="solved":
+		return decode_utf8(content)
 	return ""
+	
+	
+	
+	
+	
+	
+	
+def indent(l):
+	indent=""
+	for i in range(0,l):
+		indent+="\t"
+	return indent

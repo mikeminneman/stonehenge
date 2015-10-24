@@ -4,19 +4,30 @@ from unidecode import unidecode
 from Crypto.Cipher import DES3
 from Crypto.Hash import MD5
 
-def remove_spaces(text): # returns string
-	if type(text) == bytes:
+def remove_spaces(content): # returns string
+	if type(content) == bytes:
 		nosp = b''
-		for i in range(0,len(text)):
-			if text[i:i+1]!=b' ':
-				nosp+=text[i:i+1]
+		for i in range(0,len(content)):
+			if content[i:i+1]!=b' ':
+				nosp+=content[i:i+1]
 		return nosp
-	elif type(text) == str:
-		return text.replace(" ","")
+	elif type(content) == str:
+		return content.replace(" ","")
 	return False
 
-def hex2num(text): # returns value
-	return binascii.unhexlify(text)
+def decode_hex(content):
+	if type(content) == bytes:
+		return binascii.unhexlify(content)
+	elif type(content) == str:
+		return binascii.unhexlify(bytes(content,encoding='utf-8'))
+	return False
+
+def decode_base64(content):
+	if type(content) == bytes:
+		return base64.b64decode(content)
+	elif type(content) == str:
+		return base64.b64decode(bytes(content,encoding='utf-8'))
+	return False
 
 def decode_ascii(val): # returns string
 	try:
@@ -38,9 +49,6 @@ def decode_utf8(val): # returns string
 def encode_utf8(text): # returns value
 	return text.encode('utf-8')
 
-def decode_b64(val): # returns value
-	return base64.b64decode(val)
-	
 def encode_b64(val): # returns value
 	return base64.b64encode(val)
 	
@@ -73,3 +81,13 @@ def get_first8(val): # returns value
 
 def remove_first8(val): # returns value
 	return val[len(val)-8:]
+	
+#Legacy
+
+def hex2num(text): # returns value
+	return decode_hex(text)
+
+def decode_b64(val): # returns value
+	return decode_base64(val)
+	
+

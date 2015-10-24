@@ -1,3 +1,9 @@
+import binascii
+import base64
+from unidecode import unidecode
+from Crypto.Cipher import DES3
+from Crypto.Hash import MD5
+
 def remove_spaces(text): # returns string
 	return text.replace(" ","")
 	

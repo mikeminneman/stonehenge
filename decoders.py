@@ -5,8 +5,16 @@ from Crypto.Cipher import DES3
 from Crypto.Hash import MD5
 
 def remove_spaces(text): # returns string
-	return text.replace(" ","")
-	
+	if type(text) == bytes:
+		nosp = b''
+		for i in range(0,len(text)):
+			if text[i:i+1]!=b' ':
+				nosp+=text[i:i+1]
+		return nosp
+	elif type(text) == str:
+		return text.replace(" ","")
+	return False
+
 def hex2num(text): # returns value
 	return binascii.unhexlify(text)
 

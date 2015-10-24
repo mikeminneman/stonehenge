@@ -2,6 +2,8 @@ from detectors import *
 from decoders import *
 
 def find_approach(content):
+	if type(content)==str:
+		content=content.encode('utf-8')
 	types = detect(content)	
 	methods = lookup_method(types)
 	if methods==[]:
@@ -16,22 +18,35 @@ def find_approach(content):
 				if newcontent == "":
 					approach = []
 				else:
-					newapproach = append(find_method(newcontent))
-					if newapproach[len(newapproach)-1]=="solved":
-						approach = [method].append(newapproach)
+					newapproach = find_approach(newcontent)
+					if len(newapproach)>1 and newapproach[len(newapproach)-1]=="solved":
+						approach = [method]+newapproach
 						return approach
 					else:
-						approach = [method].append(newapproach) #does not matter
+						approach = [method]+newapproach #does not matter
 	return approach
 	
 def solve(content, approach):
-	return ""
+	if type(content)==str:
+		content=content.encode('utf-8')
+	solution = content
+	for method in approach:
+		solution = decode(solution, method)
+	return solution
 	
 def detect(content):
+	if detect_hex_w_spaces(content):
+		return ["hex_w_spaces"]
 	return []
 
 def lookup_method(types):
-	return []
+	methods=[]
+	for type in types:
+		if type=="hex_w_spaces":
+			methods.append("remove_spaces")
+	return methods
 	
 def decode(content, method):
+	if method=="remove_spaces":
+		return remove_spaces(content)
 	return ""

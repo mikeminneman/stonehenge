@@ -45,8 +45,12 @@ def solve(content, approach):
 	
 def detect(content):
 	types = []
+	if detect_spaces(content):
+		types.append("spaces")
 	if detect_hex_w_spaces(content):
 		types.append("hex_w_spaces")
+	if detect_hex_replaced_3A(content):
+		types.append("hex_replaced_3A")
 	if detect_hex(content):
 		types.append("hex")
 	if detect_base64(content):
@@ -61,8 +65,12 @@ def lookup_method(types):
 		methods=["solved"]
 	else:
 		for type in types:
+			if type=="spaces":
+				methods.append("remove_spaces")
 			if type=="hex_w_spaces":
 				methods.append("remove_spaces")
+			if type=="hex_replaced_3A":
+				methods.append("replace_3A")
 			if type=="hex":
 				methods.append("decode_hex")
 			if type=="base64":

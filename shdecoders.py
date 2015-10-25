@@ -27,10 +27,13 @@ def unb64codec(post_b64, codec):
 	return post_unb64_text
 	
 def b64(post_content):
-	post_nospace = remove_spaces(post_content)
-	post_unhex = hex2num(post_nospace)
-	base64_bin = encode_b64(post_unhex)
-	base64_utf8 = decode_utf8(base64_bin)
+	try:
+		post_nospace = remove_spaces(post_content)
+		post_unhex = hex2num(post_nospace)
+		base64_bin = encode_b64(post_unhex)
+		base64_utf8 = decode_utf8(base64_bin)
+	except:
+		base64_utf8 = ''
 	return base64_utf8
 	
 def des3decrypt(post_content,key_hex):

@@ -14,6 +14,23 @@ def remove_spaces(content): # returns string
 	elif type(content) == str:
 		return content.replace(" ","").replace("\n","").replace("\r","").replace("\t","")
 	return b''
+	
+def replace_3A(content): # returns string
+	if type(content) == bytes:
+		nosp = b''
+		for i in range(0,len(content)):
+			if content[i:i+1]==b'#':
+				nosp+=b'3'
+			elif content[i:i+1]==b'V':
+				nosp+=b'A'
+			elif content[i:i+1]==b'v':
+				nosp+=b'a'			
+			else:
+				nosp+=content[i:i+1]
+		return nosp
+	elif type(content) == str:
+		return content.replace("#","3").replace("V","A").replace("v","a")
+	return b''
 
 def decode_hex(content):
 	if type(content) == bytes:

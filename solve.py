@@ -122,7 +122,7 @@ def lookup_method(types):
 	return methods
 	
 def decode(content, method, md5=''):
-	if method=="solved":
+	if "solved" in method:
 		return content
 	if method=="remove_spaces":
 		return remove_spaces(content)
@@ -158,7 +158,7 @@ def solve(content, approach=[], md5=''):
 		for method in approach:
 			solution = decode(solution, method, md5)
 		if "remove_first8" in approach:
-			solution = b"????????"+solution
+			solution = b"????????"+(solution if type(solution)==bytes else solution.encode('utf-8'))
 	else:
 		solution=b""
 	return solution

@@ -3,6 +3,9 @@ from decoders import *
 
 def find_approach(content,l=0):
 	nl=l+1
+	if l>10:
+		print("Too deep.")
+		return []
 	if type(content)==str:
 		content=content.encode('utf-8')
 	types = detect(content)	
@@ -51,8 +54,10 @@ def detect(content):
 		types.append("hex_w_spaces")
 	if detect_hex(content):
 		types.append("hex")
-	if detect_hex_replaced_3A(content):
-		types.append("hex_replaced_3A")
+	if detect_hexlike_w_spaces(content):
+		types.append("hexlike_w_spaces")
+	if detect_hexlike(content):
+		types.append("hexlike")	
 	if detect_base64(content):
 		types.append("base64")
 	if detect_utf8(content):
@@ -61,18 +66,18 @@ def detect(content):
 
 def lookup_method(types):
 	methods=[]
-	if ("utf8" in types) and not("hex_replaced_3A" in types) and not("hex_w_spaces" in types) and not("hex" in types) and not("base64" in types):
+	if ("utf8" in types) and not("hexlike_w_spaces" in types) and not("hexlike" in types) and not("hex_w_spaces" in types) and not("hex" in types) and not("base64" in types):
 		methods=["solved"]
 	else:
 		for type in types:
 			#if type=="spaces":
 				#methods.append("remove_spaces")
-			if type=="hex_w_spaces":
+			if type=="hex_w_spaces" or type=="hexlike_w_spaces":
 				methods.append("remove_spaces")
 			if type=="hex":
 				methods.append("decode_hex")
-			if type=="hex_replaced_3A":
-				methods.append("replace_3A")
+			if type=="hexlike":
+				methods.append("decode_hexlike")
 			if type=="base64":
 				methods.append("decode_base64")
 	return methods
@@ -82,8 +87,8 @@ def decode(content, method):
 		return remove_spaces(content)
 	if method=="decode_hex":
 		return decode_hex(content)
-	if method=="replace_3A":
-		return replace_3A(content)
+	if method=="decode_hexlike":
+		return decode_hexlike(content)
 	if method=="decode_base64":
 		return decode_base64(content)
 	if method=="solved":

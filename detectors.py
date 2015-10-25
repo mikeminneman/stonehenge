@@ -17,15 +17,16 @@ def detect_hex(text): # returns boolean
 	
 def detect_hex_w_spaces(text):
 	return detect_spaces(text) and detect_hex(remove_spaces(text))
-	
-def detect_hex_replaced_3A(text):
-	if detect_spaces(text):
-		text=remove_spaces(text)
+
+def detect_hexlike(text):
+	extrachars='#Vv'
 	if type(text) == bytes:
-		return all(c in bytes(string.hexdigits+'#Vv',encoding='utf-8') for c in text)
+		return not(detect_hex(text)) and all(c in bytes(string.hexdigits+extrachars,encoding='utf-8') for c in text)
 	elif type(text) == str:
-		return all(c in string.hexdigits+'#Vv' for c in text)
-	return False
+		return not(detect_hex(text)) and all(c in string.hexdigits+extrachars for c in text)
+
+def detect_hexlike_w_spaces(text):
+	return detect_spaces(text) and detect_hexlike(remove_spaces(text))
 	
 def detect_base64(text):
 	validchars=string.ascii_letters+string.digits+'+/='

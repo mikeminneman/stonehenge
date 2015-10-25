@@ -15,8 +15,7 @@ def remove_spaces(content): # returns string
 		return content.replace(" ","").replace("\n","").replace("\r","").replace("\t","")
 	return b''
 	
-def replace_3A(content): # returns string
-	content=remove_spaces(content)
+def decode_hexlike(content):
 	if type(content) == bytes:
 		nosp = b''
 		for i in range(0,len(content)):

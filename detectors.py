@@ -3,9 +3,9 @@ from decoders import *
 
 def detect_spaces(text): # returns boolean
 	if type(text) == bytes:
-		return (b' ' in text)
+		return (b' ' in text) or (b'\r' in text) or (b'\n' in text) or (b'\t' in text)
 	elif type(text) == str:
-		return (' ' in text)
+		return (' ' in text) or ('\r' in text) or ('\n' in text) or ('\t' in text)
 	return False
 
 def detect_hex(text): # returns boolean

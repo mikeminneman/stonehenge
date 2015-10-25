@@ -19,7 +19,7 @@ def find_approach(content,l=0):
 				break
 			else:
 				newcontent = decode(content, method)
-				if newcontent == "":
+				if newcontent == b'':
 					approach = []
 				else:
 					newapproach = find_approach(newcontent,nl)
@@ -33,11 +33,14 @@ def find_approach(content,l=0):
 	return approach
 	
 def solve(content, approach):
-	if type(content)==str:
-		content=content.encode('utf-8')
-	solution = content
-	for method in approach:
-		solution = decode(solution, method)
+	if len(approach)>0 and approach[len(approach)-1]=="solved":
+		if type(content)==str:
+			content=content.encode('utf-8')
+		solution = content
+		for method in approach:
+			solution = decode(solution, method)
+	else:
+		solution=b""
 	return solution
 	
 def detect(content):
@@ -54,15 +57,16 @@ def detect(content):
 
 def lookup_method(types):
 	methods=[]
-	for type in types:
-		if type=="hex_w_spaces":
-			methods.append("remove_spaces")
-		if type=="hex":
-			methods.append("decode_hex")
-		if type=="base64":
-			methods.append("decode_base64")
-		if type=="utf8":
-			methods.append("solved")
+	if ("utf8" in types) and not("hex_w_spaces" in types) and not("hex" in types) and not("base64" in types):
+		methods=["solved"]
+	else:
+		for type in types:
+			if type=="hex_w_spaces":
+				methods.append("remove_spaces")
+			if type=="hex":
+				methods.append("decode_hex")
+			if type=="base64":
+				methods.append("decode_base64")
 	return methods
 	
 def decode(content, method):

@@ -8,26 +8,34 @@ def remove_spaces(content): # returns string
 	if type(content) == bytes:
 		nosp = b''
 		for i in range(0,len(content)):
-			if content[i:i+1]!=b' ':
+			if content[i:i+1]!=b' ' and content[i:i+1]!=b'\r' and content[i:i+1]!=b'\n' and content[i:i+1]!=b'\t':
 				nosp+=content[i:i+1]
 		return nosp
 	elif type(content) == str:
-		return content.replace(" ","")
-	return False
+		return content.replace(" ","").replace("\n","").replace("\r","").replace("\t","")
+	return b''
 
 def decode_hex(content):
 	if type(content) == bytes:
 		return binascii.unhexlify(content)
 	elif type(content) == str:
 		return binascii.unhexlify(bytes(content,encoding='utf-8'))
-	return False
+	return b''
 
 def decode_base64(content):
 	if type(content) == bytes:
-		return base64.b64decode(content)
+		try:
+			return base64.b64decode(content)
+		except:
+			return b""
+			pass
 	elif type(content) == str:
-		return base64.b64decode(bytes(content,encoding='utf-8'))
-	return False
+		try:
+			return base64.b64decode(bytes(content,encoding='utf-8'))
+		except:
+			return ""
+			pass
+	return b''
 
 def decode_ascii(val): # returns string
 	try:

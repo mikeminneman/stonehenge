@@ -65,8 +65,8 @@ def lookup_method(types):
 		methods=["solved"]
 	else:
 		for type in types:
-			if type=="spaces":
-				methods.append("remove_spaces")
+			#if type=="spaces":
+				#methods.append("remove_spaces")
 			if type=="hex_w_spaces":
 				methods.append("remove_spaces")
 			if type=="hex":

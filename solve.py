@@ -147,9 +147,9 @@ def find_keys(content, approach):
 		if "des3ecb" in method:
 			key=find_key_des3ecb(solution)
 			keys.append(key)
-		# if "des3cbc" in method:
-			# key=find_key_des3cbc(solution)
-			# keys.append(key)
+		if "des3cbc" in method:
+			key=find_key_des3cbc(solution)
+			keys.append(key)
 		solution = decode(solution, method)
 	return keys
 

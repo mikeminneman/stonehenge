@@ -54,8 +54,10 @@ def display_post(post):
 		post.md5a858des3cbc = md5a858des3cbc
 		pass
 	recursiveapproach = find_approach(post.content)
+	recursivekeys = find_keys(post.content,recursiveapproach)
 	recursivesolution = solve(post.content,recursiveapproach)
 	post.recursiveapproach = str(recursiveapproach if solvedapproach(recursiveapproach) else [])
+	post.recursivekeys = str(recursivekeys)
 	post.recursivesolution = str(recursivesolution,encoding='utf-8',errors='replace')
 	return render_template('show_one_post.html',post=post)
 

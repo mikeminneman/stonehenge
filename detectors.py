@@ -10,7 +10,7 @@ def remove_spaces(content): # returns string
 				nosp+=content[i:i+1]
 		return nosp
 	elif type(content) == str:
-		nosp = b''
+		nosp = ''
 		for i in range(0,len(content)):
 			if not(content[i:i+1] in spacechars):
 				nosp+=content[i:i+1]

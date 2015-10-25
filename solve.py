@@ -39,17 +39,6 @@ def find_approach(content,l=0):
 	print(str(l)+indent(l)+ " Returning: "+str(approach))
 	return approach
 	
-def solve(content, approach):
-	if solvedapproach(approach):
-		if type(content)==str:
-			content=content.encode('utf-8')
-		solution = content
-		for method in approach:
-			solution = decode(solution, method)
-	else:
-		solution=b""
-	return solution
-	
 def detect(content):
 	types = []
 	if detect_utf8(content):
@@ -136,12 +125,36 @@ def decode(content, method):
 		return decode_des3cbc_title(content)
 	return ""
 	
+def solve(content, approach):
+	if type(content)==str:
+		content=content.encode('utf-8')
+	if solvedapproach(approach):
+		solution = content
+		for method in approach:
+			solution = decode(solution, method)
+	else:
+		solution=b""
+	return solution
+	
+	
+	
+def find_keys(content, approach):
+	if type(content)==str:
+		content=content.encode('utf-8')
+	keys=[]
+	solution=content
+	for method in approach:
+		if "des3ecb" in method:
+			key=find_key_des3ecb(solution)
+			keys.append(key)
+		# if "des3cbc" in method:
+			# key=find_key_des3cbc(solution)
+			# keys.append(key)
+		solution = decode(solution, method)
+	return keys
+
 def solvedapproach(approach):
 	return len(approach)>0 and ("solved" in approach[len(approach)-1])
-	
-	
-	
-	
 	
 def indent(l):
 	indent=""

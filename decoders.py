@@ -55,14 +55,39 @@ def getivs(): # should be replaced by db tabl
 	return ivs
 	
 def decode_des3ecb(content):
+	key=find_key_des3ecb(content)
+	pt=try_key_des3ecb(content,key)
+	if detect_utf8(pt):
+		return pt		
+	return b''
+	
+def find_key_des3ecb(content):
 	keys=getkeys()
 	pt=b''
 	for key in keys:
+		pt=try_key_des3ecb(content,key)
+		if len(pt)>0:
+			return key
+	return b'0000000000000000'
+	
+def try_key_des3ecb(content,key):
+	returnpt=b''
+	if len(key)==16:
+		m=key
+		pt=decode_des3_ecb(content,m)
+		if detect_utf8(pt):
+			returnpt=pt
+	if len(key)==32 and detect_hex(key):
+		m=binascii.unhexlify(key)
+		pt=decode_des3_ecb(content,m)
+		if detect_utf8(pt):
+			returnpt=pt
+	if True:
 		m=encode_md5(key)
 		pt=decode_des3_ecb(content,m)
 		if detect_utf8(pt):
-			return pt
-	return b''
+			returnpt=pt
+	return returnpt
 	
 def decode_des3ecb_title(content):
 	pt=b''

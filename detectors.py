@@ -2,6 +2,9 @@ import string
 
 spacechars=' \r\n\t\x04\x05\x08\x02\x06'
 spacebytes=bytes(spacechars,encoding='utf-8')
+
+otherchars='-'
+otherbytes=bytes(otherchars,encoding='utf-8')
 	
 def remove_spaces(content): # returns string
 	if type(content) == bytes:
@@ -35,6 +38,38 @@ def detect_spaces(content): # returns boolean
 		return nosp
 	return False
 
+def remove_other(content): # returns string
+	if type(content) == bytes:
+		nosp = b''
+		for i in range(0,len(content)):
+			if not(content[i:i+1] in otherbytes):
+				nosp+=content[i:i+1]
+		return nosp
+	elif type(content) == str:
+		nosp = ''
+		for i in range(0,len(content)):
+			if not(content[i:i+1] in otherchars):
+				nosp+=content[i:i+1]
+		return nosp
+	return b''
+	
+def detect_other(content): # returns boolean
+	if type(content) == bytes:
+		nosp = False
+		for i in range(0,len(content)):
+			if content[i:i+1] in otherbytes:
+				nosp = True
+				return nosp
+		return nosp
+	elif type(content) == str:
+		nosp = False
+		for i in range(0,len(content)):
+			if content[i:i+1] in otherchars:
+				nosp = True
+				return nosp
+		return nosp
+	return False
+
 def detect_hex(text): # returns boolean
 	if type(text) == bytes:
 		return all(c in bytes(string.hexdigits,encoding='utf-8') for c in text)
@@ -54,6 +89,20 @@ def detect_hexlike(text):
 
 def detect_hexlike_w_spaces(text):
 	return detect_spaces(text) and detect_hexlike(remove_spaces(text))
+	
+def detect_binary(text):
+	bits='01'
+	if type(text) == bytes:
+		return all(c in bytes(bits,encoding='utf-8') for c in text)
+	elif type(text) == str:
+		return all(c in bits for c in text)
+	return False
+
+def detect_binary_w_spaces(content):
+	return detect_spaces(content) and detect_binary(remove_spaces(content))
+	
+def detect_binary_w_other(content):
+	return detect_other(content) and detect_binary(remove_spaces(remove_other(content)))
 	
 def detect_base64(text):
 	validchars=string.ascii_letters+string.digits+'+/='

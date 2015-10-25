@@ -49,7 +49,13 @@ def detect(content):
 		print("Detected utf8")
 		if detect_spaces(content):
 			print("Detected spaces")
-			if detect_hex_w_spaces(content):
+			if detect_binary_w_spaces(content):
+				print("Detected binary_w_spaces")
+				types.append("binary_w_spaces")
+			elif detect_binary_w_other(content):
+				print("Detected binary_w_other")
+				types.append("binary_w_other")
+			elif detect_hex_w_spaces(content):
 				print("Detected hex_w_spaces")
 				types.append("hex_w_spaces")
 			elif detect_hexlike_w_spaces(content):
@@ -60,7 +66,10 @@ def detect(content):
 				types.append("utf8")
 		else:
 			print("No spaces")
-			if detect_hex(content):
+			if detect_binary(content):
+				print("Detected binary")
+				types.append("binary")
+			elif detect_hex(content):
 				print("Detected hex")
 				types.append("hex")
 			elif detect_hexlike(content):
@@ -93,39 +102,53 @@ def lookup_method(types):
 		methods.append("remove_first8")
 	else:
 		for type in types:
-			if "hex_w_spaces" in type or "hexlike_w_spaces" in type:
+			if type=="binary":
+				methods.append("decode_binary")
+			if type=="binary_w_other":
+				methods.append("remove_other")
+			if type=="binary_w_spaces":
+				methods.append("rotate_breaks")
+			if type=="hex_w_spaces" or type=="hexlike_w_spaces" or type=="binary_w_spaces":
 				methods.append("remove_spaces")
-			if "hex" in type:
+			if type=="hex":
 				methods.append("decode_hex")
-			if "hexlike" in type:
+			if type=="hexlike":
 				methods.append("decode_hexlike")
-			if "base64" in type:
+			if type=="base64":
 				methods.append("decode_base64")
-			if "mult8" in type:
+			if type=="mult8":
 				methods.append("decode_des3ecb")
 				methods.append("decode_des3cbc")
 	return methods
 	
 def decode(content, method, md5=''):
-	if "solved" in method:
+	if method=="solved":
 		return content
-	if "remove_spaces" in method:
+	if method=="remove_spaces":
 		return remove_spaces(content)
-	if "decode_hex" in method:
+	if method=="decode_hex":
 		return decode_hex(content)
-	if "decode_hexlike" in method:
+	if method=="decode_hexlike":
 		return decode_hexlike(content)
-	if "decode_base64" in method:
+	if method=="decode_base64":
 		return decode_base64(content)
-	if "decode_des3ecb" in method:
+	if method=="decode_des3ecb":
 		return decode_des3ecb(content,md5)
-	if "decode_des3cbc" in method:
+	if method=="decode_des3cbc":
 		return decode_des3cbc(content,md5)
-	if "remove_first8" in method:
+	if method=="remove_first8":
 		return remove_first8(content)
+	if method=="rotate_breaks":
+		return rotate_breaks(content)
+	if method=="decode_binary":
+		return decode_binary(content)
+	if method=="remove_other":
+		return remove_other(content)
 	return ""
 	
-def solve(content, approach, md5=''):
+def solve(content, approach=[], md5=''):
+	if approach==[]:
+		approach=find_approach(content)
 	if type(content)==str:
 		content=content.encode('utf-8')
 	if md5=='':

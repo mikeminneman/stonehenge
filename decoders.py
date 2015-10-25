@@ -140,7 +140,26 @@ def try_key_des3cbc(content,key,md5=''):
 			returnpt=pt
 	return returnpt
 	
-
+def rotate_breaks(content):
+	content_str=content.decode('utf-8')
+	content_arr=content_str.split('\r\n')
+	num_col=len(content_arr[0])
+	num_row=len(content_arr)
+	result=''
+	for col in range(0,num_col):
+		for row in range(0,num_row):
+			result+=content_arr[row][col]
+	return result.encode('utf-8')
+	
+def decode_binary(content):
+	if len(content)%8!=0:
+		return b''
+	byte_len=int(len(content)/8)
+	content_hex=b''
+	for i in range(0,byte_len):
+		bits=content[i*8:(i+1)*8]
+		content_hex+=hex(int(bits,base=2))[2:].encode('utf-8')
+	return content_hex
 	
 	
 	

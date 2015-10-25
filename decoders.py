@@ -47,11 +47,11 @@ def decode_base64(content):
 	return b''
 
 def getkeys(): # should be replaced by db table
-	keys=[b'A858DE45F56D9BC9',b'0000DE45']
+	keys=[b'A858DE45F56D9BC9',b'0000DE45',b'f8278df7c61e8ed0b77cb19c2b0e6e20']
 	return keys
 	
 def getivs(): # should be replaced by db tabl
-	ivs=[b'\0\0\0\0\0\0\0\0']
+	ivs=[b'\0\0\0\0\0\0\0\0',b'ff4e00a2']
 	return ivs
 	
 def decode_des3ecb(content):

@@ -47,8 +47,11 @@ def detect_base64(text):
 		return len(text)%4==0 and all(c in validchars for c in text)
 	return False
 
+def detect_mult4(text):
+	return len(text)%4==0 and len(text)>0
+	
 def detect_mult8(text):
-	return len(text)%8==0
+	return len(text)%8==0 and len(text)>0
 
 def detect_ascii(val): # returns boolean
 	try:

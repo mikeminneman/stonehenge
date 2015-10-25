@@ -48,21 +48,27 @@ def solve(content, approach):
 	
 def detect(content):
 	types = []
-	if detect_hex_w_spaces(content):
-		types.append("hex_w_spaces")
-	if detect_hex(content):
-		types.append("hex")
-	if detect_hexlike_w_spaces(content):
-		types.append("hexlike_w_spaces")
-	if detect_hexlike(content):
-		types.append("hexlike")	
-	if detect_base64(content):
-		types.append("base64")
 	if detect_utf8(content):
-		types.append("utf8")
-	if detect_utf8end(content):
+		if detect_spaces(content):
+			if detect_hex_w_spaces(content):
+				types.append("hex_w_spaces")
+			elif detect_hexlike_w_spaces(content):
+				types.append("hexlike_w_spaces")
+			else:
+				types.append("utf8")
+		else:
+			if detect_hex(content):
+				types.append("hex")
+			elif detect_hexlike(content):
+				types.append("hexlike")
+			elif detect_mult4("content"):
+				if detect_base64(content):
+					types.append("base64")
+			else:
+				types.append("utf8")
+	elif detect_utf8end(content):
 		types.append("utf8end")
-	if detect_mult8(content):
+	elif detect_mult8(content):
 		types.append("mult8")
 	return types
 

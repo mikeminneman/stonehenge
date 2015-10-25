@@ -73,12 +73,21 @@ def decode_des3_cbc(ct, key, iv): # takes values, returns value
 	d = DES3.new(key,DES3.MODE_CBC, iv)
 	return d.decrypt(ct)
 
-def add_n_after_20(text): # returns string
-	result = ""
-	for i in range(0, len(text)):
-		result+=text[i]
-		if (i+1)%20 == 0:
-			result+='\n'
+def add_n_after_x(text,x):
+	if type(text)=='bytes':
+		result=b''
+		for i in range(0, len(text)):
+			result+=text[i]
+			if (i+1)%x == 0:
+				result+=b'\n'
+	elif type(text)=='str':
+		result = ""
+		for i in range(0, len(text)):
+			result+=text[i]
+			if (i+1)%x == 0:
+				result+='\n'
+	else:
+		result=b''
 	return result
 	
 def utf2ascii(text): # returns text

@@ -54,7 +54,7 @@ def display_post(post):
 		pass
 	recursiveapproach = find_approach(post.content)
 	recursivesolution = solve(post.content,recursiveapproach)
-	post.recursiveapproach = str(recursiveapproach)
+	post.recursiveapproach = str(recursiveapproach if len(recursiveapproach)>0 and recursiveapproach[len(recursiveapproach)-1]=="solved" else [])
 	post.recursivesolution = str(recursivesolution,encoding='utf-8',errors='replace')
 	return render_template('show_one_post.html',post=post)
 

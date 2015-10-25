@@ -22,9 +22,9 @@ def detect_base64(text):
 	validchars=string.ascii_letters+string.digits+'+/='
 	validbytes=bytes(validchars,encoding='utf-8')
 	if type(text) == bytes:
-		return all(c in validbytes for c in text)
+		return len(text)%4==0 and all(c in validbytes for c in text)
 	elif type(text) == str:
-		return all(c in validchars for c in text)
+		return len(text)%4==0 and all(c in validchars for c in text)
 	return False
 	
 def detect_ascii(val): # returns boolean
@@ -40,6 +40,7 @@ def detect_utf8(val): # returns boolean
 	except UnicodeDecodeError:
 		result = ''
 	return len(result)>0
+
 
 
 	

@@ -1,8 +1,9 @@
 import string
 
+spacechars=' \r\n\t\x04\x05\x08\x02\x06'
+spacebytes=bytes(spacechars,encoding='utf-8')
+	
 def remove_spaces(content): # returns string
-	spacechars=' \r\n\t\x04\x05\x08\x02'
-	spacebytes=bytes(spacechars,encoding='utf-8')
 	if type(content) == bytes:
 		nosp = b''
 		for i in range(0,len(content)):
@@ -18,8 +19,6 @@ def remove_spaces(content): # returns string
 	return b''
 	
 def detect_spaces(content): # returns boolean
-	spacechars=' \r\n\t\x04\x05\x08\x02'
-	spacebytes=bytes(spacechars,encoding='utf-8')
 	if type(content) == bytes:
 		nosp = False
 		for i in range(0,len(content)):

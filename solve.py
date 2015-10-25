@@ -36,8 +36,10 @@ def find_approach(content,l=0,md5=''):
 							approach = [method]+newapproach
 						break
 					else:
-						if method=="decode_hex":
+						if "decode_hex" in method:
 							approach = ["solved-onlyhex"]
+	if solvedapproach(approach) and "remove_first8" in approach:
+		approach[len(approach)-1]="solved-neediv"
 	print(str(l)+indent(l)+ " Returning: "+str(approach))
 	return approach
 	
@@ -88,18 +90,18 @@ def lookup_method(types):
 	if ("utf8" in types) and not("hexlike_w_spaces" in types) and not("hexlike" in types) and not("hex_w_spaces" in types) and not("hex" in types) and not("base64" in types):
 		methods=["solved"]
 	elif ("utf8end" in types):
-		methods=["solved-neediv"]
+		methods.append("remove_first8")
 	else:
 		for type in types:
-			if type=="hex_w_spaces" or type=="hexlike_w_spaces":
+			if "hex_w_spaces" in type or "hexlike_w_spaces" in type:
 				methods.append("remove_spaces")
-			if type=="hex":
+			if "hex" in type:
 				methods.append("decode_hex")
-			if type=="hexlike":
+			if "hexlike" in type:
 				methods.append("decode_hexlike")
-			if type=="base64":
+			if "base64" in type:
 				methods.append("decode_base64")
-			if type=="mult8":
+			if "mult8" in type:
 				methods.append("decode_des3ecb")
 				methods.append("decode_des3cbc")
 	return methods
@@ -107,18 +109,20 @@ def lookup_method(types):
 def decode(content, method, md5=''):
 	if "solved" in method:
 		return content
-	if method=="remove_spaces":
+	if "remove_spaces" in method:
 		return remove_spaces(content)
-	if method=="decode_hex":
+	if "decode_hex" in method:
 		return decode_hex(content)
-	if method=="decode_hexlike":
+	if "decode_hexlike" in method:
 		return decode_hexlike(content)
-	if method=="decode_base64":
+	if "decode_base64" in method:
 		return decode_base64(content)
-	if method=="decode_des3ecb":
+	if "decode_des3ecb" in method:
 		return decode_des3ecb(content,md5)
-	if method=="decode_des3cbc":
+	if "decode_des3cbc" in method:
 		return decode_des3cbc(content,md5)
+	if "remove_first8" in method:
+		return remove_first8(content)
 	return ""
 	
 def solve(content, approach, md5=''):
@@ -130,6 +134,8 @@ def solve(content, approach, md5=''):
 		solution = content
 		for method in approach:
 			solution = decode(solution, method, md5)
+		if "remove_first8" in approach:
+			solution = b"????????"+solution
 	else:
 		solution=b""
 	return solution

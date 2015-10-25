@@ -64,3 +64,16 @@ def display_post(post):
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
+	
+def populate_solutions():
+	posts=getallposts()
+	for post in posts:
+		print("####################### "+post.title+" "+post.shortcode+" #######################")
+		approach=find_approach(post.content)
+		solution=solve(post.content,approach)
+		key = find_keys(post.content,approach)
+		post.key='' if len(key)==0 else key[0].decode('utf-8')
+		post.auto_approach=','.join(approach) if solvedapproach(approach) else ''
+		post.auto_solution=solution
+	session.commit()
+	return True

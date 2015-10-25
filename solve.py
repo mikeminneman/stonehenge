@@ -8,6 +8,8 @@ def find_approach(content,l=0,md5=''):
 		return []
 	if type(content)==str:
 		content=content.encode('utf-8')
+	elif type(content)!=bytes:
+		content=b''
 	if md5=='':
 		md5=binascii.hexlify(encode_md5(content)).decode('utf-8')
 	types = detect(content)	
@@ -38,6 +40,8 @@ def find_approach(content,l=0,md5=''):
 					else:
 						if "decode_hex" in method:
 							approach = ["solved-onlyhex"]
+						else:
+							approach = [method]+newapproach # does not matter
 	if solvedapproach(approach) and "remove_first8" in approach:
 		approach[len(approach)-1]="solved-neediv"
 	print(str(l)+indent(l)+ " Returning: "+str(approach))
@@ -45,6 +49,10 @@ def find_approach(content,l=0,md5=''):
 	
 def detect(content):
 	types = []
+	if type(content)==str:
+		content=content.encode('utf-8')
+	elif type(content)!=bytes:
+		content=b''
 	if detect_utf8(content):
 		print("Detected utf8")
 		if detect_spaces(content):
@@ -122,6 +130,10 @@ def lookup_method(types):
 	return methods
 	
 def decode(content, method, md5=''):
+	if type(content)==str:
+		content=content.encode('utf-8')
+	elif type(content)!=bytes:
+		content=b''
 	if "solved" in method:
 		return content
 	if method=="remove_spaces":
@@ -151,6 +163,8 @@ def solve(content, approach=[], md5=''):
 		approach=find_approach(content)
 	if type(content)==str:
 		content=content.encode('utf-8')
+	elif type(content)!=bytes:
+		content=b''
 	if md5=='':
 		md5=binascii.hexlify(encode_md5(content)).decode('utf-8')
 	if solvedapproach(approach):
@@ -168,6 +182,8 @@ def solve(content, approach=[], md5=''):
 def find_keys(content, approach, md5=''):
 	if type(content)==str:
 		content=content.encode('utf-8')
+	elif type(content)!=bytes:
+		content=b''
 	if md5=='':
 		md5=binascii.hexlify(encode_md5(content)).decode('utf-8')
 	keys=[]

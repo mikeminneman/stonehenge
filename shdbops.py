@@ -101,6 +101,6 @@ def getkeys(md5=''):
 	return keylist
 	
 def getivs(): # should be replaced by db table
-	ivs=[b'\0\0\0\0\0\0\0\0',b'ff4e00a2']
+	ivs=[b'\0\0\0\0\0\0\0\0',b'ff4e00a2',binascii.unhexlify(b'cf40ad098ec6a4a8')]
 	return ivs
 	

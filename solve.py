@@ -4,7 +4,7 @@ from decoders import *
 def find_approach(content,l=0):
 	nl=l+1
 	if l>10:
-		print("Too deep.")
+		print("Too deep--------------------------------Too deep--------------------------------Too deep")
 		return []
 	if type(content)==str:
 		content=content.encode('utf-8')
@@ -28,10 +28,14 @@ def find_approach(content,l=0):
 					newapproach = find_approach(newcontent,nl)
 					print(str(l)+indent(l)+" New approach: "+str(newapproach))
 					if solvedapproach(newapproach):
-						approach = [method]+newapproach
+						if "remove_spaces" in newapproach[len(newapproach)-2]:
+							approach = [method]+["solved-onlyhex"]
+						else:
+							approach = [method]+newapproach
 						break
 					else:
-						approach = [method]+newapproach #does not matter
+						if method=="decode_hex":
+							approach = ["solved-onlyhex"]
 	print(str(l)+indent(l)+ " Returning: "+str(approach))
 	return approach
 	
@@ -49,26 +53,42 @@ def solve(content, approach):
 def detect(content):
 	types = []
 	if detect_utf8(content):
+		print("Detected utf8")
 		if detect_spaces(content):
+			print("Detected spaces")
 			if detect_hex_w_spaces(content):
+				print("Detected hex_w_spaces")
 				types.append("hex_w_spaces")
 			elif detect_hexlike_w_spaces(content):
+				print("Detected hexlike_w_spaces")
 				types.append("hexlike_w_spaces")
 			else:
+				print("Must be utf8")
 				types.append("utf8")
 		else:
+			print("No spaces")
 			if detect_hex(content):
+				print("Detected hex")
 				types.append("hex")
 			elif detect_hexlike(content):
+				print("Detected hexlike")
 				types.append("hexlike")
-			elif detect_mult4("content"):
+			elif detect_mult4(content):
+				print("Detected mult4")
 				if detect_base64(content):
+					print("Detected base64")
 					types.append("base64")
+				else:
+					print("Must be utf8")
+					types.append("utf8")
 			else:
+				print("Must be utf8")
 				types.append("utf8")
 	elif detect_utf8end(content):
+		print("Detected utf8end")
 		types.append("utf8end")
 	elif detect_mult8(content):
+		print("Detected mult8")
 		types.append("mult8")
 	return types
 

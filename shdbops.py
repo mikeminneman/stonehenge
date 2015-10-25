@@ -51,3 +51,8 @@ def populate_lengths():
 			return False
 	session.commit()
 	return True
+	
+import binascii
+def getbytes(post_shortcode):
+	post=getbyshortcode(post_shortcode)
+	return binascii.unhexlify(post.content.replace(" ",""))

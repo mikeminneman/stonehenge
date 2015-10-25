@@ -3,17 +3,9 @@ import base64
 from unidecode import unidecode
 from Crypto.Cipher import DES3
 from Crypto.Hash import MD5
+from detectors import *
 
-def remove_spaces(content): # returns string
-	if type(content) == bytes:
-		nosp = b''
-		for i in range(0,len(content)):
-			if content[i:i+1]!=b' ' and content[i:i+1]!=b'\r' and content[i:i+1]!=b'\n' and content[i:i+1]!=b'\t':
-				nosp+=content[i:i+1]
-		return nosp
-	elif type(content) == str:
-		return content.replace(" ","").replace("\n","").replace("\r","").replace("\t","")
-	return b''
+
 	
 def decode_hexlike(content):
 	if type(content) == bytes:
@@ -54,6 +46,63 @@ def decode_base64(content):
 			pass
 	return b''
 
+def getkeys(): # should be replaced by db table
+	keys=[b'A858DE45F56D9BC9',b'0000DE45']
+	return keys
+	
+def getivs(): # should be replaced by db tabl
+	ivs=[b'\0\0\0\0\0\0\0\0']
+	return ivs
+	
+def decode_des3ecb(content):
+	keys=getkeys()
+	pt=b''
+	for key in keys:
+		m=encode_md5(key)
+		pt=decode_des3_ecb(content,m)
+		if detect_utf8(pt):
+			return pt
+	return b''
+	
+def decode_des3ecb_title(content):
+	pt=b''
+	key=b'post title' #but how to get this
+	m=encode_md5(key)
+	pt=decode_des3_ecb(content,m)
+	if detect_utf8(pt):
+		return pt
+	return b''
+	
+def decode_des3cbc(content):
+	keys=getkeys()
+	ivs=getivs()
+	pt=b''
+	for key in keys:
+		m=encode_md5(key)
+		for iv in ivs:
+			pt=decode_des3_cbc(content,m,iv)
+			if detect_utf8(pt):
+				return pt
+		if detect_utf8(remove_first8(pt)):
+			return pt
+	return b''
+	
+def decode_des3cbc_title(content):
+	pt=b''
+	key=b'post title' #but how to get this
+	m=encode_md5(key)
+	ivs=getivs();
+	for iv in ivs:
+		pt=decode_des3_cbc(content,m,iv)
+		if detect_utf8(pt):
+			return pt
+	if detect_utf8(remove_first8(pt)):
+		return(pt)
+	return b''
+	
+	
+	
+	
 def decode_ascii(val): # returns string
 	try:
 		result = str(val,encoding='ascii')
@@ -110,11 +159,7 @@ def add_n_after_x(text,x):
 def utf2ascii(text): # returns text
 	return unidecode(text)
 	
-def get_first8(val): # returns value
-	return val[:8]
 
-def remove_first8(val): # returns value
-	return val[len(val)-8:]
 	
 #Legacy
 

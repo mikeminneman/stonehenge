@@ -1,11 +1,21 @@
 import string
-from decoders import *
 
+def remove_spaces(content): # returns string
+	if type(content) == bytes:
+		nosp = b''
+		for i in range(0,len(content)):
+			if content[i:i+1]!=b' ' and content[i:i+1]!=b'\r' and content[i:i+1]!=b'\n' and content[i:i+1]!=b'\t' and content[i:i+1]!=b'\4' and content[i:i+1]!=b'\5':
+				nosp+=content[i:i+1]
+		return nosp
+	elif type(content) == str:
+		return content.replace(" ","").replace("\n","").replace("\r","").replace("\t","").replace("\4","").replace("\5","")
+	return b''
+	
 def detect_spaces(text): # returns boolean
 	if type(text) == bytes:
-		return (b' ' in text) or (b'\r' in text) or (b'\n' in text) or (b'\t' in text)
+		return (b' ' in text) or (b'\r' in text) or (b'\n' in text) or (b'\t' in text)or (b'\4' in text)or (b'\5' in text)
 	elif type(text) == str:
-		return (' ' in text) or ('\r' in text) or ('\n' in text) or ('\t' in text)
+		return (' ' in text) or ('\r' in text) or ('\n' in text) or ('\t' in text)or ('\4' in text)or ('\5' in text)
 	return False
 
 def detect_hex(text): # returns boolean
@@ -36,7 +46,10 @@ def detect_base64(text):
 	elif type(text) == str:
 		return len(text)%4==0 and all(c in validchars for c in text)
 	return False
-	
+
+def detect_mult8(text):
+	return len(text)%8==0
+
 def detect_ascii(val): # returns boolean
 	try:
 		result = str(val,encoding='ascii')
@@ -51,6 +64,14 @@ def detect_utf8(val): # returns boolean
 		result = ''
 	return len(result)>0
 
+def detect_utf8end(text):
+	return not(detect_utf8(text)) and detect_utf8(remove_first8(text))
+	
+def get_first8(val): # returns value
+	return val[:8]
+
+def remove_first8(val): # returns value
+	return b"" if len(val)<8 else val[8:len(val)]
 
 
 	

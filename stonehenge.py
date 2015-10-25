@@ -32,6 +32,7 @@ def show_title(post_title):
 	return display_post(post)
 
 def display_post(post):
+	post.link = "" if not(hasattr(post, 'link')) else post.link
 	post.shortcode = get_shortcode(post.link) if not(hasattr(post, 'shortcode')) else post.shortcode
 	post.length = get_length(post.content) if not(hasattr(post, 'length')) else post.length
 	post.soulsphere = get_soulsphere(post.shortcode)
@@ -54,7 +55,7 @@ def display_post(post):
 		pass
 	recursiveapproach = find_approach(post.content)
 	recursivesolution = solve(post.content,recursiveapproach)
-	post.recursiveapproach = str(recursiveapproach if len(recursiveapproach)>0 and recursiveapproach[len(recursiveapproach)-1]=="solved" else [])
+	post.recursiveapproach = str(recursiveapproach if solvedapproach(recursiveapproach) else [])
 	post.recursivesolution = str(recursivesolution,encoding='utf-8',errors='replace')
 	return render_template('show_one_post.html',post=post)
 

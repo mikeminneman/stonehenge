@@ -1,4 +1,3 @@
-#import string
 import re
 
 def get_shortcode(post_link):

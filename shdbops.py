@@ -34,7 +34,11 @@ def getbymd5(post_md5):
 	return post
 
 def gettitlefrommd5(post_md5):
-	return getbymd5(post_md5).title
+	post=getbymd5(post_md5)
+	if hasattr(post,'title'):
+		return getbymd5(post_md5).title
+	else:
+		return ''
 	
 def getlimitedposts(limit):
 	posts=session.query(Posts).limit(limit).all()
@@ -81,16 +85,19 @@ def getbytes(post_shortcode):
 	post=getbyshortcode(post_shortcode)
 	return binascii.unhexlify(post.content.replace(" ",""))
 	
-def getkeys():
+def getkeys(md5=''):
 	keylist=[]
 	# if hasattr(Base.classes,'keys'):
 		# keys = session.query(Keys).all()
 		# for key in keys:
 			# keylist.append(bytes(key.key,encoding='utf-8'))
-	posts = getallposts()
-	for post in posts:
-		keylist.append(bytes(post.title,encoding='utf-8'))
 	keylist+=[b'A858DE45F56D9BC9',b'A858DE45F56D9BC9A858DE45F56D9BC9',b'0000DE45',b'f8278df7c61e8ed0b77cb19c2b0e6e20',b'34A14A42E98FF96095AF56604E290CAE']
+	if md5!='':
+		title=gettitlefrommd5(md5)
+		for i in range(0,len(keylist)):
+			keylist.append(keylist[i]+title.encode('utf-8'))
+			keylist.append(title.encode('utf-8')+keylist[i])
+		keylist.append(title.encode('utf-8'))
 	return keylist
 	
 def getivs(): # should be replaced by db table

@@ -46,23 +46,30 @@ def decode_base64(content):
 			pass
 	return b''
 
-def decode_des3ecb(content):
-	key=find_key_des3ecb(content)
-	pt=try_key_des3ecb(content,key)
+def decode_des3ecb(content,md5=''):
+	if md5=='':
+		md5=binascii.hexlify(encode_md5(content)).decode('utf-8')
+	key=find_key_des3ecb(content,md5)
+	pt=try_key_des3ecb(content,key,md5)
 	if detect_utf8(pt):
 		return pt		
 	return b''
 	
-def find_key_des3ecb(content):
-	keys=getkeys()
+def find_key_des3ecb(content,md5=''):
+	if md5=='':
+		md5=binascii.hexlify(encode_md5(content)).decode('utf-8')
+	keys=getkeys(md5)
 	pt=b''
 	for key in keys:
-		pt=try_key_des3ecb(content,key)
+		pt=try_key_des3ecb(content,key,md5)
 		if len(pt)>0:
 			return key
 	return b'0000000000000000'
 	
-def try_key_des3ecb(content,key):
+def try_key_des3ecb(content,key,md5=''):
+	print("Trying key: "+str(key))
+	if md5=='':
+		md5=binascii.hexlify(encode_md5(content)).decode('utf-8')
 	returnpt=b''
 	if len(key)==16:
 		m=key
@@ -81,32 +88,30 @@ def try_key_des3ecb(content,key):
 			returnpt=pt
 	return returnpt
 	
-def decode_des3ecb_title(content):
-	pt=b''
-	key=b'post title' #but how to get this; currently will be solved becuse getkeys returns all titles
-	m=encode_md5(key)
-	pt=decode_des3_ecb(content,m)
-	if detect_utf8(pt):
-		return pt
-	return b''
-	
-def decode_des3cbc(content):
-	key=find_key_des3cbc(content)
-	pt=try_key_des3cbc(content,key)
+def decode_des3cbc(content,md5=''):
+	if md5=='':
+		md5=binascii.hexlify(encode_md5(content)).decode('utf-8')
+	key=find_key_des3cbc(content,md5)
+	pt=try_key_des3cbc(content,key,md5)
 	if detect_utf8(pt) or detect_utf8end(pt):
 		return pt		
 	return b''
 	
-def find_key_des3cbc(content):
-	keys=getkeys()
+def find_key_des3cbc(content,md5=''):
+	if md5=='':
+		md5=binascii.hexlify(encode_md5(content)).decode('utf-8')
+	keys=getkeys(md5)
 	pt=b''
 	for key in keys:
-		pt=try_key_des3cbc(content,key)
+		pt=try_key_des3cbc(content,key,md5)
 		if len(pt)>0:
 			return key
 	return b'0000000000000000'
 	
-def try_key_des3cbc(content,key):
+def try_key_des3cbc(content,key,md5=''):
+	print("Trying key: "+str(key))
+	if md5=='':
+		md5=binascii.hexlify(encode_md5(content)).decode('utf-8')
 	returnpt=b''
 	ivs=getivs()
 	if len(key)==16:
@@ -135,19 +140,7 @@ def try_key_des3cbc(content,key):
 			returnpt=pt
 	return returnpt
 	
-def decode_des3cbc_title(content):
-	pt=b''
-	key=b'post title' #but how to get this
-	m=encode_md5(key)
-	ivs=getivs();
-	for iv in ivs:
-		pt=decode_des3_cbc(content,m,iv)
-		if detect_utf8(pt):
-			return pt
-	if detect_utf8(remove_first8(pt)):
-		return(pt)
-	return b''
-	
+
 	
 	
 	

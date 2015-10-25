@@ -1,13 +1,15 @@
 from detectors import *
 from decoders import *
 
-def find_approach(content,l=0):
+def find_approach(content,l=0,md5=''):
 	nl=l+1
 	if l>10:
 		print("Too deep--------------------------------Too deep--------------------------------Too deep")
 		return []
 	if type(content)==str:
 		content=content.encode('utf-8')
+	if md5=='':
+		md5=binascii.hexlify(encode_md5(content)).decode('utf-8')
 	types = detect(content)	
 	methods = lookup_method(types)
 	print(str(l)+indent(l)+" Types: "+str(types))
@@ -21,11 +23,11 @@ def find_approach(content,l=0):
 				approach = [method]
 				break
 			else:
-				newcontent = decode(content, method)
+				newcontent = decode(content, method, md5)
 				if newcontent == b'':
 					approach = []
 				else:
-					newapproach = find_approach(newcontent,nl)
+					newapproach = find_approach(newcontent,nl,md5)
 					print(str(l)+indent(l)+" New approach: "+str(newapproach))
 					if solvedapproach(newapproach):
 						if "remove_spaces" in newapproach[len(newapproach)-2]:
@@ -99,12 +101,10 @@ def lookup_method(types):
 				methods.append("decode_base64")
 			if type=="mult8":
 				methods.append("decode_des3ecb")
-				methods.append("decode_des3ecb_title")
 				methods.append("decode_des3cbc")
-				methods.append("decode_des3cbc_title")
 	return methods
 	
-def decode(content, method):
+def decode(content, method, md5=''):
 	if "solved" in method:
 		return content
 	if method=="remove_spaces":
@@ -116,39 +116,39 @@ def decode(content, method):
 	if method=="decode_base64":
 		return decode_base64(content)
 	if method=="decode_des3ecb":
-		return decode_des3ecb(content)
-	if method=="decode_des3ecb_title":
-		return decode_des3ecb_title(content)
+		return decode_des3ecb(content,md5)
 	if method=="decode_des3cbc":
-		return decode_des3cbc(content)
-	if method=="decode_des3cbc":
-		return decode_des3cbc_title(content)
+		return decode_des3cbc(content,md5)
 	return ""
 	
-def solve(content, approach):
+def solve(content, approach, md5=''):
 	if type(content)==str:
 		content=content.encode('utf-8')
+	if md5=='':
+		md5=binascii.hexlify(encode_md5(content)).decode('utf-8')
 	if solvedapproach(approach):
 		solution = content
 		for method in approach:
-			solution = decode(solution, method)
+			solution = decode(solution, method, md5)
 	else:
 		solution=b""
 	return solution
 	
 	
 	
-def find_keys(content, approach):
+def find_keys(content, approach, md5=''):
 	if type(content)==str:
 		content=content.encode('utf-8')
+	if md5=='':
+		md5=binascii.hexlify(encode_md5(content)).decode('utf-8')
 	keys=[]
 	solution=content
 	for method in approach:
 		if "des3ecb" in method:
-			key=find_key_des3ecb(solution)
+			key=find_key_des3ecb(solution,md5)
 			keys.append(key)
 		if "des3cbc" in method:
-			key=find_key_des3cbc(solution)
+			key=find_key_des3cbc(solution,md5)
 			keys.append(key)
 		solution = decode(solution, method)
 	return keys

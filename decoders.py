@@ -25,10 +25,11 @@ def decode_hexlike(content):
 	return b''
 
 def decode_hex(content):
-	if type(content) == bytes:
-		return binascii.unhexlify(content)
-	elif type(content) == str:
-		return binascii.unhexlify(bytes(content,encoding='utf-8'))
+	if len(content)%2==0:
+		if type(content) == bytes:
+			return binascii.unhexlify(content)
+		elif type(content) == str:
+			return binascii.unhexlify(bytes(content,encoding='utf-8'))
 	return b''
 
 def decode_base64(content):

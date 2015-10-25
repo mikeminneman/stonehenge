@@ -3,6 +3,9 @@ import string
 spacechars=' \r\n\t\x04\x05\x08\x02\x06'
 spacebytes=bytes(spacechars,encoding='utf-8')
 
+paddingchars='\x04\x05\x08\x02\x06'
+paddingbytes=bytes(paddingchars,encoding='utf-8')
+
 otherchars='-'
 otherbytes=bytes(otherchars,encoding='utf-8')
 	

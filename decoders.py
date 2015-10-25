@@ -16,6 +16,7 @@ def remove_spaces(content): # returns string
 	return b''
 	
 def replace_3A(content): # returns string
+	content=remove_spaces(content)
 	if type(content) == bytes:
 		nosp = b''
 		for i in range(0,len(content)):

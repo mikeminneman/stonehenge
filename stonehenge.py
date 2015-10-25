@@ -35,6 +35,7 @@ def display_post(post):
 	post.link = "" if not(hasattr(post, 'link')) else post.link
 	post.shortcode = get_shortcode(post.link) if not(hasattr(post, 'shortcode')) else post.shortcode
 	post.length = get_length(post.content) if not(hasattr(post, 'length')) else post.length
+	post.md5 = get_md5(post.content) if not(hasattr(post, 'md5')) else post.md5
 	post.soulsphere = get_soulsphere(post.shortcode)
 	post.redditwiki = get_redditwiki(post.title)
 	post.unhex = unhex(post.content)

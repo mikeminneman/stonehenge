@@ -15,6 +15,7 @@ session = Session(engine)
 
 from shinfo import *
 import binascii
+from Crypto.Hash import MD5
 
 def getbyid(post_id):
 	post=session.query(Posts).filter_by(id=post_id).first()
@@ -27,6 +28,13 @@ def getbyshortcode(post_shortcode):
 def getbytitle(post_title):
 	post=session.query(Posts).filter_by(title=post_title).first()
 	return post
+
+def getbymd5(post_md5):
+	post=session.query(Posts).filter_by(md5=post_md5).first()
+	return post
+
+def gettitlefrommd5(post_md5):
+	return getbymd5(post_md5).title
 	
 def getlimitedposts(limit):
 	posts=session.query(Posts).limit(limit).all()
@@ -51,6 +59,19 @@ def populate_lengths():
 	for post in posts:
 		if hasattr(post, 'length'):
 			post.length = get_length(post.content)
+		else:
+			return False
+	session.commit()
+	return True
+	
+def populate_md5():
+	posts=getallposts()
+	for post in posts:
+		if hasattr(post, 'md5'):
+			content = "" if not(type(post.content)==str) else post.content
+			m=MD5.new()
+			m.update(content.encode('utf-8'))
+			post.md5 = binascii.hexlify(m.digest()).decode('utf-8')
 		else:
 			return False
 	session.commit()

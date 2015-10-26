@@ -48,6 +48,18 @@ def getallposts():
 	posts=session.query(Posts).all()
 	return posts
 	
+def getsolvedposts():
+	allposts=getallposts()
+	posts=[]
+	hexposts=[]
+	for post in allposts:
+		if hasattr(post,'auto_approach') and (("solved" in post.auto_approach and not("solved-onlyhex" in post.auto_approach)) or ("decode_des3" in post.auto_approach)):
+			if not("solved-onlyhex" in post.auto_approach):
+				posts.append(post)
+			else:
+				hexposts.append(post)
+	return posts+hexposts
+	
 def populate_shortcodes():
 	posts=getallposts()
 	for post in posts:

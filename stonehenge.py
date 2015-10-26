@@ -14,6 +14,11 @@ def display_index():
 	posts=getlimitedposts(100)
 	return render_template('show_posts.html',posts=posts)
 	
+@app.route('/solved')
+def display_solved():
+	posts=getsolvedposts()
+	return render_template('show_posts.html',posts=posts)
+	
 @app.route('/post/<int:post_id>')
 @app.route('/id/<int:post_id>')
 def show_id(post_id):

@@ -104,6 +104,8 @@ def detect_other(content): # returns boolean
 	return False
 
 def detect_hex(text): # returns boolean
+	if len(text)%2!=0:
+		return False
 	if type(text) == bytes:
 		return all(c in bytes(string.hexdigits,encoding='utf-8') for c in text)
 	elif type(text) == str:
@@ -117,6 +119,8 @@ def detect_hex_w_padding(text):
 	return detect_padding(text) and detect_hex(remove_spaces(remove_padding(text)))
 
 def detect_hexlike(text):
+	if len(text)%2!=0:
+		return False
 	extrachars='#Vv'
 	if type(text) == bytes:
 		return not(detect_hex(text)) and all(c in bytes(string.hexdigits+extrachars,encoding='utf-8') for c in text)

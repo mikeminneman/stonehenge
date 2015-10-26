@@ -68,7 +68,7 @@ def find_key_des3ecb(content,md5=''):
 	return b'0000000000000000'
 	
 def try_key_des3ecb(content,key,md5=''):
-	print("Trying key: "+str(key))
+	#print("Trying key: "+str(key))
 	if md5=='':
 		md5=binascii.hexlify(encode_md5(content)).decode('utf-8')
 	returnpt=b''
@@ -110,7 +110,7 @@ def find_key_des3cbc(content,md5=''):
 	return b'0000000000000000'
 	
 def try_key_des3cbc(content,key,md5=''):
-	print("Trying key: "+str(key))
+	#print("Trying key: "+str(key))
 	if md5=='':
 		md5=binascii.hexlify(encode_md5(content)).decode('utf-8')
 	returnpt=b''

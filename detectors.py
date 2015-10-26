@@ -1,14 +1,44 @@
 import string
 
-spacechars=' \r\n\t\x04\x05\x08\x02\x06'
+spacechars=' \r\n\t'
 spacebytes=bytes(spacechars,encoding='utf-8')
 
-paddingchars='\x04\x05\x08\x02\x06'
+paddingchars='\x04\x05\x08\x02\x06\x01'
 paddingbytes=bytes(paddingchars,encoding='utf-8')
 
 otherchars='-'
 otherbytes=bytes(otherchars,encoding='utf-8')
-	
+
+def remove_padding(content):
+	if type(content)==bytes:
+		firstsp=0
+		for i in range(0,len(content)):
+			if not(content[i:i+1] in paddingbytes):
+				firstsp=i+1
+		return content[0:firstsp]
+	elif type(content)==str:
+		firstsp=0
+		for i in range(0,len(content)):
+			if not(content[i:i+1] in paddingchars):
+				firstsp=i+1
+		return content[0:firstsp]
+	return content
+
+def detect_padding(content):
+	if type(content)==bytes:
+		firstsp=0
+		for i in range(0,len(content)):
+			if not(content[i:i+1] in paddingbytes):
+				firstsp=i+1
+		return firstsp!=len(content)
+	elif type(content)==str:
+		firstsp=0
+		for i in range(0,len(content)):
+			if not(content[i:i+1] in paddingchars):
+				firstsp=i+1
+		return firstsp!=len(content)
+	return False
+
 def remove_spaces(content): # returns string
 	if type(content) == bytes:
 		nosp = b''
@@ -82,6 +112,9 @@ def detect_hex(text): # returns boolean
 	
 def detect_hex_w_spaces(text):
 	return detect_spaces(text) and detect_hex(remove_spaces(text))
+	
+def detect_hex_w_padding(text):
+	return detect_padding(text) and detect_hex(remove_spaces(remove_padding(text)))
 
 def detect_hexlike(text):
 	extrachars='#Vv'
@@ -145,6 +178,10 @@ def get_first8(val): # returns value
 def remove_first8(val): # returns value
 	return b"" if len(val)<8 else val[8:len(val)]
 
-
+def detect_brackets(content):
+	return content[0:6]==b'[3des]'
 	
+def remove_brackets(content):
+	return content[53:len(content)-1]
+
 	

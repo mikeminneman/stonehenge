@@ -55,7 +55,10 @@ def detect(content):
 		content=b''
 	if detect_utf8(content):
 		print("Detected utf8")
-		if detect_spaces(content):
+		if detect_padding(content):
+			print("Detected padding")
+			types.append("padding")
+		elif detect_spaces(content):
 			print("Detected spaces")
 			if detect_binary_w_spaces(content):
 				print("Detected binary_w_spaces")
@@ -69,6 +72,9 @@ def detect(content):
 			elif detect_hexlike_w_spaces(content):
 				print("Detected hexlike_w_spaces")
 				types.append("hexlike_w_spaces")
+			elif detect_brackets(content):
+				print("Detected brackets")
+				types.append("brackets")
 			else:
 				print("Must be utf8")
 				types.append("utf8")
@@ -118,6 +124,8 @@ def lookup_method(types):
 				methods.append("rotate_breaks")
 			if type=="hex_w_spaces" or type=="hexlike_w_spaces" or type=="binary_w_spaces":
 				methods.append("remove_spaces")
+			if type=="padding":
+				methods.append("remove_padding")
 			if type=="hex":
 				methods.append("decode_hex")
 			if type=="hexlike":
@@ -127,6 +135,8 @@ def lookup_method(types):
 			if type=="mult8":
 				methods.append("decode_des3ecb")
 				methods.append("decode_des3cbc")
+			if type=="brackets":
+				methods.append("remove_brackets")
 	return methods
 	
 def decode(content, method, md5=''):
@@ -156,6 +166,10 @@ def decode(content, method, md5=''):
 		return decode_binary(content)
 	if method=="remove_other":
 		return remove_other(content)
+	if method=="remove_padding":
+		return remove_padding(content)
+	if method=="remove_brackets":
+		return remove_brackets(content)
 	return ""
 	
 def solve(content, approach=[], md5=''):

@@ -65,15 +65,43 @@ def display_post(post):
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
 	
-def populate_solutions():
+def populate_solutions(auto=False):
 	posts=getallposts()
+	total=len(posts)
+	cur=0
 	for post in posts:
-		print("####################### "+post.title+" "+post.shortcode+" #######################")
+		cur+=1
+		print(str(cur)+"/"+str(total)+" ####################### "+str(post.id)+" "+post.title+" "+post.shortcode+" #######################")
 		approach=find_approach(post.content)
 		solution=solve(post.content,approach)
 		key = find_keys(post.content,approach)
-		post.key='' if len(key)==0 else key[0].decode('utf-8')
-		post.auto_approach=','.join(approach) if solvedapproach(approach) else ''
-		post.auto_solution=solution
+		newkey='' if len(key)==0 else key[0].decode('utf-8')
+		newauto_approach=','.join(approach) if solvedapproach(approach) else ''
+		newauto_solution=solution.decode('utf-8')
+		if newkey!=post.key or newauto_approach!=post.auto_approach or newauto_solution!=post.auto_solution:
+			print("New solution found for "+post.title+" "+post.shortcode)
+			print("Old Approach: "+post.auto_approach)
+			print("New Approach: "+newauto_approach)
+			print("Old Key: "+post.key)
+			print("New Key: "+newkey)
+			try:
+				print("Old Solution: \n"+post.auto_solution)
+			except:
+				print("Old Solution: cannot print")
+				pass
+			try:
+				print("New Solution: \n"+newauto_solution)
+			except:
+				print("New Solution: cannot print")
+				pass
+			answer='yes' if auto else input("Do you want to accept this change? (Type 'yes' to accept): ")
+			if answer=='yes':
+				print("Saving for database commit.")
+				post.key=newkey
+				post.auto_approach=newauto_approach
+				post.auto_solution=newauto_solution
+				session.commit()
+			else:
+				print("Discarding change. Will not be saved in database commit.")
 	session.commit()
 	return True

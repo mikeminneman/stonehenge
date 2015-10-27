@@ -121,7 +121,7 @@ def bruteforce(startkey=0,endkey=340282366920938463463374607431768211455,keyleng
 	posts=getunsolvedposts()
 	total=len(posts)
 	cur=0
-	keynum=0
+	keynum=startkey
 	if keylength%2!=0:
 		keylength+=1
 	while keynum<=endkey:

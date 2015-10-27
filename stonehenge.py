@@ -23,7 +23,7 @@ def display_solved():
 	
 @app.route('/unsolved')
 def display_unsolved():
-	posts=ungetsolvedposts()
+	posts=getunsolvedposts()
 	return render_template('show_posts.html',posts=posts)
 	
 @app.route('/post/<int:post_id>')

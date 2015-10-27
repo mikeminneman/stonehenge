@@ -21,6 +21,11 @@ def display_solved():
 	posts=getsolvedposts()
 	return render_template('show_posts.html',posts=posts)
 	
+@app.route('/unsolved')
+def display_unsolved():
+	posts=ungetsolvedposts()
+	return render_template('show_posts.html',posts=posts)
+	
 @app.route('/post/<int:post_id>')
 @app.route('/id/<int:post_id>')
 def show_id(post_id):

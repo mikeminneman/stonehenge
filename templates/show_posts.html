@@ -1,32 +1,34 @@
 {% extends "layout.html" %}
 {% block body %}
-  <table class="table table-striped table-hover">
-	<tr>
-		<th>Title</th>
-		<th>Formatted Date</th>
-		<th>Shortcode</th>
-		<th>Length</th>
-		<th>Hex</th>
-		<th>Decrypted</th>
-		<th>Semi Solved?</th>
-		<th>Iteration</th>
-		<th>Event</th>
-		<th>Notes</th>
-		<th>Link</th>
-		<th>Tracker Link</th>
-		<th>gID</th>
-	</tr>
-  {% for post in posts %}
-	<tr>
-		<th><a href="/post/{{post.id}}">{{post.title}}</a></th>
-		<th>{{post.title}}</th>
-		<th>{{post.shortcode}}</th>
-		<th>{{post.length}}</th>
-		<th></th>
-		<th style="max-height: 50px; max-width:300px; overflow:hidden;white-space:nowrap;">{{post.auto_solution}}</th>
-	</tr>
-  {% else %}
-    <tr><td>No posts</td></tr>
-  {% endfor %}
-  </table>
+    <table class="table table-striped table-hover">
+        <tr>
+            <th>Title</th>
+            <th>Formatted Date</th>
+            <th>Shortcode</th>
+            <th>Length</th>
+            <th>Hex</th>
+            <th>Decrypted</th>
+            <th>Semi Solved?</th>
+            <th>Iteration</th>
+            <th>Event</th>
+            <th>Notes</th>
+            <th>Link</th>
+            <th>Tracker Link</th>
+            <th>gID</th>
+        </tr>
+        {% for post in posts %}
+            <tr>
+                <th><a href="/post/{{ post.id }}">{{ post.title }}</a></th>
+                <th>{{ post.title }}</th>
+                <th>{{ post.shortcode }}</th>
+                <th>{{ post.length }}</th>
+                <th></th>
+                <th style="max-height: 50px; max-width:300px; overflow:hidden;white-space:nowrap;">{{ post.auto_solution }}</th>
+            </tr>
+        {% else %}
+            <tr>
+                <td>No posts</td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}

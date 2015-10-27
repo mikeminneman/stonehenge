@@ -1,28 +1,28 @@
 {% extends "layout.html" %}
 {% block body %}
-  <div name="content" style="font-family: monospace;">
-	Id: {{post.id}}<br />
-	Link: <a href='{{post.link}}'>{{post.link}}</a><br />
-	Autologger: <a href='{{post.soulsphere}}'>{{post.soulsphere}}</a><br />
-	Wiki: <a href='{{post.redditwiki}}'>{{post.redditwiki}}</a><br />
-	Shortcode: {{post.shortcode}}<br />
-	Length: {{post.length}}<br />
-	Title: {{post.title}}<br />
-	MD5: {{post.md5}}<br />
+    <div name="content" style="font-family: monospace;">
+        Id: {{ post.id }}<br/>
+        Link: <a href='{{ post.link }}'>{{ post.link }}</a><br/>
+        Autologger: <a href='{{ post.soulsphere }}'>{{ post.soulsphere }}</a><br/>
+        Wiki: <a href='{{ post.redditwiki }}'>{{ post.redditwiki }}</a><br/>
+        Shortcode: {{ post.shortcode }}<br/>
+        Length: {{ post.length }}<br/>
+        Title: {{ post.title }}<br/>
+        MD5: {{ post.md5 }}<br/>
 	<span style="overflow-wrap: break-word; white-space: pre-line;">
-	Content: <br />{{post.content}}<br /><br />
-	Auto-method: {{post.recursiveapproach}}<br />
-	Auto-key: {{post.recursivekeys}}<br />
-	Auto-solution: <br /><span style="white-space: pre-wrap;">{{post.recursivesolution}}</span><br />
-	Unhexed: <br />{{post.unhex}}<br /><br />
-	Base 64 Decode as UTF-8: <br />{{post.unb64_utf8}}<br /><br />
+	Content: <br/>{{ post.content }}<br/><br/>
+	Auto-method: {{ post.recursiveapproach }}<br/>
+	Auto-key: {{ post.recursivekeys }}<br/>
+	Auto-solution: <br/><span style="white-space: pre-wrap;">{{ post.recursivesolution }}</span><br/>
+	Unhexed: <br/>{{ post.unhex }}<br/><br/>
+	Base 64 Decode as UTF-8: <br/>{{ post.unb64_utf8 }}<br/><br/>
 	<!--Base 64 Decode as UTF-8 into ASCII: <br />{{post.unb64_utf8_ascii}}<br /><br />-->
-	Base 64 Decode as UTF-8 and Unhexed: <br />{{post.unb64_utf8_unhex}}<br /><br />
-	A858 DES-EDE-ECB as UTF-8: <br />{{post.md5a858des3_utf8}}<br /><br />
-	A858 DES-EDE-CBC with IV 0 as UTF-8: <br />{{post.md5a858des3cbc}}<br /><br />
-	Images: <br /><img src='data:image/gif;base64,{{post.b64}}' /><br /><br />
+	Base 64 Decode as UTF-8 and Unhexed: <br/>{{ post.unb64_utf8_unhex }}<br/><br/>
+	A858 DES-EDE-ECB as UTF-8: <br/>{{ post.md5a858des3_utf8 }}<br/><br/>
+	A858 DES-EDE-CBC with IV 0 as UTF-8: <br/>{{ post.md5a858des3cbc }}<br/><br/>
+	Images: <br/><img src='data:image/gif;base64,{{ post.b64 }}'/><br/><br/>
 	</span>
-  </div>
-  <script type="text/javascript">
-  </script>
+    </div>
+    <script type="text/javascript">
+    </script>
 {% endblock %}

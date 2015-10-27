@@ -133,13 +133,14 @@ def bruteforce(startkey=0,endkey=340282366920938463463374607431768211455,keyleng
 		mykey=bytes(int(keylength/2)-len(unpaddedkey))+unpaddedkey
 		print("!!!!!!!!!!!!!!!! Elapsed Time: "+str((time.time()-starttime)/60)+" min")
 		print("!!!!!!!!!!!!!!!! Starting key: "+binascii.hexlify(mykey).decode('utf-8')+" !!!!!!!!!!!!!!!!")
+		cur=0
 		for post in posts:
 			config.keylist=[mykey]
 			#print(str(config.keylist))
 			cur+=1
 			#print(str(cur)+"/"+str(total)+" ####################### "+str(post.id)+" "+post.title+" "+post.shortcode+" #######################")
 			if cur%1000==0:
-				print("################ Post "+str(cur)+"/"+str(total)+" at "+str(time.time()-starttime)+" sec")
+				print("################ Post "+str(cur)+"/"+str(total)+" at "+str((time.time()-starttime)/60)+" min")
 			approach=find_approach(post.content)
 			solution=solve(post.content,approach)
 			key = find_keys(post.content,approach)

@@ -151,25 +151,25 @@ def bruteforce(startkey=0,endkey=340282366920938463463374607431768211455,keyleng
 				print("New solution found for "+post.title+" "+post.shortcode)
 				print("Old Approach: "+str(post.auto_approach))
 				print("New Approach: "+str(newauto_approach))
-				#print("Old Key: "+str(post.key))
-				#print("New Key: "+str(newkey))
-				#try:
-					#print("Old Solution: \n"+str(post.auto_solution))
-				#except:
-				#	print("Old Solution: cannot print")
-				#	pass
-				#try:
-				#	print("New Solution: \n"+str(newauto_solution))
-				#except:
-				#	print("New Solution: cannot print")
-				#	pass
+				print("Old Key: "+str(post.key))
+				print("New Key: "+str(newkey))
+				try:
+					print("Old Solution: \n"+str(post.auto_solution))
+				except:
+					print("Old Solution: cannot print")
+					pass
+				try:
+					print("New Solution: \n"+str(newauto_solution))
+				except:
+					print("New Solution: cannot print")
+					pass
 				answer='yes' if auto else input("Do you want to accept this change? (Type 'yes' to accept): ")
 				if answer=='yes':
 					print("Saving for database commit.")
 					post.key=newkey
 					post.auto_approach=newauto_approach
 					post.auto_solution=newauto_solution
-					#session.commit()
+					session.commit()
 				else:
 					print("Discarding change. Will not be saved in database commit.")
 		session.commit()

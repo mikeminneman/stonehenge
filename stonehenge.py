@@ -4,6 +4,8 @@ app = Flask(__name__)
 from shdecoders import *
 from shdbops import *
 
+import time
+
 @app.errorhandler(500)
 def pageNotFound(error):
 	print(error)
@@ -85,17 +87,17 @@ def populate_solutions(auto=False):
 		newauto_solution=solution.decode('utf-8')
 		if newkey!=post.key or newauto_approach!=post.auto_approach or newauto_solution!=post.auto_solution:
 			print("New solution found for "+post.title+" "+post.shortcode)
-			print("Old Approach: "+post.auto_approach)
-			print("New Approach: "+newauto_approach)
-			print("Old Key: "+post.key)
-			print("New Key: "+newkey)
+			print("Old Approach: "+str(post.auto_approach))
+			print("New Approach: "+str(newauto_approach))
+			print("Old Key: "+str(post.key))
+			print("New Key: "+str(newkey))
 			try:
-				print("Old Solution: \n"+post.auto_solution)
+				print("Old Solution: \n"+str(post.auto_solution))
 			except:
 				print("Old Solution: cannot print")
 				pass
 			try:
-				print("New Solution: \n"+newauto_solution)
+				print("New Solution: \n"+str(newauto_solution))
 			except:
 				print("New Solution: cannot print")
 				pass
@@ -109,4 +111,69 @@ def populate_solutions(auto=False):
 			else:
 				print("Discarding change. Will not be saved in database commit.")
 	session.commit()
+	return True
+
+	
+#bruteforce
+def bruteforce(startkey=0,endkey=340282366920938463463374607431768211455,keylength=32,auto=False):
+	config.bf=True
+	starttime=time.time()
+	posts=getunsolvedposts()
+	total=len(posts)
+	cur=0
+	keynum=0
+	if keylength%2!=0:
+		keylength+=1
+	while keynum<=endkey:
+		keytime=time.time()
+		ununpaddedkey=hex(keynum)[2:].encode('utf-8')
+		if len(ununpaddedkey)%2!=0:
+			ununpaddedkey=b'0'+ununpaddedkey
+		unpaddedkey=binascii.unhexlify(ununpaddedkey)
+		mykey=bytes(int(keylength/2)-len(unpaddedkey))+unpaddedkey
+		print("!!!!!!!!!!!!!!!! Elapsed Time: "+str((time.time()-starttime)/60)+" min")
+		print("!!!!!!!!!!!!!!!! Starting key: "+binascii.hexlify(mykey).decode('utf-8')+" !!!!!!!!!!!!!!!!")
+		for post in posts:
+			config.keylist=[mykey]
+			#print(str(config.keylist))
+			cur+=1
+			#print(str(cur)+"/"+str(total)+" ####################### "+str(post.id)+" "+post.title+" "+post.shortcode+" #######################")
+			if cur%1000==0:
+				print("################ Post "+str(cur)+"/"+str(total)+" at "+str(time.time()-starttime)+" sec")
+			approach=find_approach(post.content)
+			solution=solve(post.content,approach)
+			key = find_keys(post.content,approach)
+			newkey='' if len(key)==0 else key[0].decode('utf-8')
+			newauto_approach=','.join(approach) if solvedapproach(approach) else ''
+			newauto_solution=solution.decode('utf-8')
+			if newkey!=post.key or newauto_approach!=post.auto_approach or newauto_solution!=post.auto_solution:
+				print("New solution found for "+post.title+" "+post.shortcode)
+				print("Old Approach: "+str(post.auto_approach))
+				print("New Approach: "+str(newauto_approach))
+				#print("Old Key: "+str(post.key))
+				#print("New Key: "+str(newkey))
+				#try:
+					#print("Old Solution: \n"+str(post.auto_solution))
+				#except:
+				#	print("Old Solution: cannot print")
+				#	pass
+				#try:
+				#	print("New Solution: \n"+str(newauto_solution))
+				#except:
+				#	print("New Solution: cannot print")
+				#	pass
+				answer='yes' if auto else input("Do you want to accept this change? (Type 'yes' to accept): ")
+				if answer=='yes':
+					print("Saving for database commit.")
+					post.key=newkey
+					post.auto_approach=newauto_approach
+					post.auto_solution=newauto_solution
+					#session.commit()
+				else:
+					print("Discarding change. Will not be saved in database commit.")
+		session.commit()
+		print("!!!!!!!!!!!!!!!! Time per post: "+str((time.time()-keytime)/total)+" sec")
+		print("!!!!!!!!!!!!!!!! Time per key: "+str(((time.time()-starttime)/(keynum+1))/60)+" min")
+		print("!!!!!!!!!!!!!!!! Ending key:   "+binascii.hexlify(mykey).decode('utf-8')+" !!!!!!!!!!!!!!!!")
+		keynum+=1
 	return True

@@ -1,10 +1,11 @@
 from detectors import *
 from decoders import *
+import config
 
 def find_approach(content,l=0,md5=''):
 	nl=l+1
 	if l>10:
-		print("Too deep--------------------------------Too deep--------------------------------Too deep")
+		if not(config.bf): print("Too deep--------------------------------Too deep--------------------------------Too deep")
 		return []
 	if type(content)==str:
 		content=content.encode('utf-8')
@@ -14,13 +15,13 @@ def find_approach(content,l=0,md5=''):
 		md5=binascii.hexlify(encode_md5(content)).decode('utf-8')
 	types = detect(content)	
 	methods = lookup_method(types)
-	print(str(l)+indent(l)+" Types: "+str(types))
-	print(str(l)+indent(l)+" Methods: "+str(methods))
+	if not(config.bf): print(str(l)+indent(l)+" Types: "+str(types))
+	if not(config.bf): print(str(l)+indent(l)+" Methods: "+str(methods))
 	if methods==[]:
 		approach = []
 	else:
 		for method in methods:
-			print(str(l)+indent(l)+" Working with method: "+method)
+			if not(config.bf): print(str(l)+indent(l)+" Working with method: "+method)
 			if "solved" in method:
 				approach = [method]
 				break
@@ -30,7 +31,7 @@ def find_approach(content,l=0,md5=''):
 					approach = []
 				else:
 					newapproach = find_approach(newcontent,nl,md5)
-					print(str(l)+indent(l)+" New approach: "+str(newapproach))
+					if not(config.bf): print(str(l)+indent(l)+" New approach: "+str(newapproach))
 					if solvedapproach(newapproach):
 						if "remove_spaces" in newapproach[len(newapproach)-2]:
 							approach = [method]+["solved-onlyhex"]
@@ -44,7 +45,7 @@ def find_approach(content,l=0,md5=''):
 							approach = [method]+newapproach # does not matter
 	if solvedapproach(approach) and "remove_first8" in approach:
 		approach[len(approach)-1]="solved-neediv"
-	print(str(l)+indent(l)+ " Returning: "+str(approach))
+	if not(config.bf): print(str(l)+indent(l)+ " Returning: "+str(approach))
 	return approach
 	
 def detect(content):
@@ -54,57 +55,57 @@ def detect(content):
 	elif type(content)!=bytes:
 		content=b''
 	if detect_utf8(content):
-		print("Detected utf8")
+		if not(config.bf): print("Detected utf8")
 		if detect_padding(content):
-			print("Detected padding")
+			if not(config.bf): print("Detected padding")
 			types.append("padding")
 		elif detect_spaces(content):
-			print("Detected spaces")
+			if not(config.bf): print("Detected spaces")
 			if detect_binary_w_spaces(content):
-				print("Detected binary_w_spaces")
+				if not(config.bf): print("Detected binary_w_spaces")
 				types.append("binary_w_spaces")
 			elif detect_binary_w_other(content):
-				print("Detected binary_w_other")
+				if not(config.bf): print("Detected binary_w_other")
 				types.append("binary_w_other")
 			elif detect_hex_w_spaces(content):
-				print("Detected hex_w_spaces")
+				if not(config.bf): print("Detected hex_w_spaces")
 				types.append("hex_w_spaces")
 			elif detect_hexlike_w_spaces(content):
-				print("Detected hexlike_w_spaces")
+				if not(config.bf): print("Detected hexlike_w_spaces")
 				types.append("hexlike_w_spaces")
 			elif detect_brackets(content):
-				print("Detected brackets")
+				if not(config.bf): print("Detected brackets")
 				types.append("brackets")
 			else:
-				print("Must be utf8")
+				if not(config.bf): print("Must be utf8")
 				types.append("utf8")
 		else:
-			print("No spaces")
+			if not(config.bf): print("No spaces")
 			if detect_binary(content):
-				print("Detected binary")
+				if not(config.bf): print("Detected binary")
 				types.append("binary")
 			elif detect_hex(content):
-				print("Detected hex")
+				if not(config.bf): print("Detected hex")
 				types.append("hex")
 			elif detect_hexlike(content):
-				print("Detected hexlike")
+				if not(config.bf): print("Detected hexlike")
 				types.append("hexlike")
 			elif detect_mult4(content):
-				print("Detected mult4")
+				if not(config.bf): print("Detected mult4")
 				if detect_base64(content):
-					print("Detected base64")
+					if not(config.bf): print("Detected base64")
 					types.append("base64")
 				else:
-					print("Must be utf8")
+					if not(config.bf): print("Must be utf8")
 					types.append("utf8")
 			else:
-				print("Must be utf8")
+				if not(config.bf): print("Must be utf8")
 				types.append("utf8")
 	elif detect_utf8end(content):
-		print("Detected utf8end")
+		if not(config.bf): print("Detected utf8end")
 		types.append("utf8end")
 	elif detect_mult8(content):
-		print("Detected mult8")
+		if not(config.bf): print("Detected mult8")
 		types.append("mult8")
 	return types
 

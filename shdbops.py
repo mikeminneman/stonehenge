@@ -121,6 +121,9 @@ def getkeys(md5=''):
 	return keylist
 	
 def getivs(): # should be replaced by db table
-	ivs=config.ivs
+	if not(config.bf):
+		ivs=config.ivlist
+	else:
+		ivs=[b'\0\0\0\0\0\0\0\0']
 	return ivs
 	

@@ -174,7 +174,7 @@ def bruteforce(startkey=0,endkey=340282366920938463463374607431768211455,keyleng
 					print("Discarding change. Will not be saved in database commit.")
 		session.commit()
 		print("!!!!!!!!!!!!!!!! Time per post: "+str((time.time()-keytime)/total)+" sec")
-		print("!!!!!!!!!!!!!!!! Time per key: "+str(((time.time()-starttime)/(keynum+1))/60)+" min")
+		print("!!!!!!!!!!!!!!!! Time per key: "+str(((time.time()-starttime)/(keynum+1-startkey))/60)+" min")
 		print("!!!!!!!!!!!!!!!! Ending key:   "+binascii.hexlify(mykey).decode('utf-8')+" !!!!!!!!!!!!!!!!")
 		keynum+=1
 	return True

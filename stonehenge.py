@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
@@ -9,7 +9,7 @@ import time
 
 
 @app.errorhandler(500)
-def pageNotFound(error):
+def page_not_found(error):
     print(error)
     return "500: " + str(error)
 
@@ -137,7 +137,6 @@ def bruteforce(startkey=0, endkey=340282366920938463463374607431768211455, keyle
     starttime = time.time()
     posts = getunsolvedposts()
     total = len(posts)
-    cur = 0
     keynum = startkey
     if keylength % 2 != 0:
         keylength += 1

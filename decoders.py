@@ -1,10 +1,10 @@
-import binascii
 import base64
 
 from unidecode import unidecode
+
+import binascii
 from Crypto.Cipher import DES3
 from Crypto.Hash import MD5
-
 from detectors import *
 from shdbops import *
 
@@ -66,7 +66,6 @@ def find_key_des3ecb(content, md5=''):
     if md5 == '':
         md5 = binascii.hexlify(encode_md5(content)).decode('utf-8')
     keys = getkeys(md5)
-    pt = b''
     for key in keys:
         pt = try_key_des3ecb(content, key, md5)
         if len(pt) > 0:
@@ -111,7 +110,6 @@ def find_key_des3cbc(content, md5=''):
     if md5 == '':
         md5 = binascii.hexlify(encode_md5(content)).decode('utf-8')
     keys = getkeys(md5)
-    pt = b''
     for key in keys:
         pt = try_key_des3cbc(content, key, md5)
         if len(pt) > 0:
@@ -125,6 +123,7 @@ def try_key_des3cbc(content, key, md5=''):
         md5 = binascii.hexlify(encode_md5(content)).decode('utf-8')
     returnpt = b''
     ivs = getivs()
+    pt=b''
     if len(key) == 16:
         m = key
         for iv in ivs:
@@ -140,7 +139,7 @@ def try_key_des3cbc(content, key, md5=''):
             if detect_utf8(pt):
                 returnpt = pt
         if detect_utf8(remove_first8(pt)):
-            returnp = pt
+            returnpt = pt
     if True:
         m = encode_md5(key)
         for iv in ivs:

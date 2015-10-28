@@ -2,4 +2,4 @@ flask
 sqlalchemy
 pycrypto
 psycopg2
-unideode
+unidecode

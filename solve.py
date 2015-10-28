@@ -3,9 +3,10 @@ import config
 
 
 def find_approach(content, l=0, md5=''):
+    approach = []
     nl = l + 1
     if l > 10:
-        if not (config.bf): print(
+        if not config.bf: print(
             "Too deep--------------------------------Too deep--------------------------------Too deep")
         return []
     if type(content) == str:
@@ -16,13 +17,13 @@ def find_approach(content, l=0, md5=''):
         md5 = binascii.hexlify(encode_md5(content)).decode('utf-8')
     types = detect(content)
     methods = lookup_method(types)
-    if not (config.bf): print(str(l) + indent(l) + " Types: " + str(types))
-    if not (config.bf): print(str(l) + indent(l) + " Methods: " + str(methods))
-    if methods == []:
+    if not config.bf: print(str(l) + indent(l) + " Types: " + str(types))
+    if not config.bf: print(str(l) + indent(l) + " Methods: " + str(methods))
+    if not methods:
         approach = []
     else:
         for method in methods:
-            if not (config.bf): print(str(l) + indent(l) + " Working with method: " + method)
+            if not config.bf: print(str(l) + indent(l) + " Working with method: " + method)
             if "solved" in method:
                 approach = [method]
                 break
@@ -32,7 +33,7 @@ def find_approach(content, l=0, md5=''):
                     approach = []
                 else:
                     newapproach = find_approach(newcontent, nl, md5)
-                    if not (config.bf): print(str(l) + indent(l) + " New approach: " + str(newapproach))
+                    if not config.bf: print(str(l) + indent(l) + " New approach: " + str(newapproach))
                     if solvedapproach(newapproach):
                         if "remove_spaces" in newapproach[len(newapproach) - 2]:
                             approach = [method] + ["solved-onlyhex"]
@@ -46,7 +47,7 @@ def find_approach(content, l=0, md5=''):
                             approach = [method] + newapproach  # does not matter
     if solvedapproach(approach) and "remove_first8" in approach:
         approach[len(approach) - 1] = "solved-neediv"
-    if not (config.bf): print(str(l) + indent(l) + " Returning: " + str(approach))
+    if not config.bf: print(str(l) + indent(l) + " Returning: " + str(approach))
     return approach
 
 
@@ -120,27 +121,27 @@ def lookup_method(types):
     elif "utf8end" in types:
         methods.append("remove_first8")
     else:
-        for type in types:
-            if type == "binary":
+        for t in types:
+            if t == "binary":
                 methods.append("decode_binary")
-            if type == "binary_w_other":
+            if t == "binary_w_other":
                 methods.append("remove_other")
-            if type == "binary_w_spaces":
+            if t == "binary_w_spaces":
                 methods.append("rotate_breaks")
-            if type == "hex_w_spaces" or type == "hexlike_w_spaces" or type == "binary_w_spaces":
+            if t == "hex_w_spaces" or t == "hexlike_w_spaces" or t == "binary_w_spaces":
                 methods.append("remove_spaces")
-            if type == "padding":
+            if t == "padding":
                 methods.append("remove_padding")
-            if type == "hex":
+            if t == "hex":
                 methods.append("decode_hex")
-            if type == "hexlike":
+            if t == "hexlike":
                 methods.append("decode_hexlike")
-            if type == "base64":
+            if t == "base64":
                 methods.append("decode_base64")
-            if type == "mult8":
+            if t == "mult8":
                 methods.append("decode_des3ecb")
                 methods.append("decode_des3cbc")
-            if type == "brackets":
+            if t == "brackets":
                 methods.append("remove_brackets")
     return methods
 
@@ -224,7 +225,7 @@ def solvedapproach(approach):
 
 
 def indent(l):
-    indent = ""
+    indentstr = ""
     for i in range(0, l):
-        indent += "\t"
-    return indent
+        indentstr += "\t"
+    return indentstr

@@ -62,8 +62,8 @@ def getsolvedposts():
     hexposts = []
     for post in allposts:
         if hasattr(post, 'auto_approach') and (
-            ("solved" in post.auto_approach and not ("solved-onlyhex" in post.auto_approach)) or (
-            "decode_des3" in post.auto_approach)):
+                    ("solved" in post.auto_approach and not ("solved-onlyhex" in post.auto_approach)) or (
+                            "decode_des3" in post.auto_approach)):
             if not ("solved-onlyhex" in post.auto_approach):
                 posts.append(post)
             else:
@@ -74,10 +74,9 @@ def getsolvedposts():
 def getunsolvedposts():
     allposts = getallposts()
     posts = []
-    hexposts = []
     for post in allposts:
         if hasattr(post, 'auto_approach') and (("solved-onlyhex" in post.auto_approach) and not (
-            "des" in post.auto_approach) or post.auto_approach == ''):
+                    "des" in post.auto_approach) or post.auto_approach == ''):
             posts.append(post)
     return posts
 
@@ -129,7 +128,7 @@ def getkeys(md5=''):
     # for key in keys:
     # keylist.append(bytes(key.key,encoding='utf-8'))
     keylist = config.keylist
-    if md5 != '' and not (config.bf):
+    if md5 != '' and not config.bf:
         title = gettitlefrommd5(md5)
         for i in range(0, len(keylist)):
             keylist.append(keylist[i] + title.encode('utf-8'))
@@ -139,7 +138,7 @@ def getkeys(md5=''):
 
 
 def getivs():  # should be replaced by db table
-    if not (config.bf):
+    if not config.bf:
         ivs = config.ivlist
     else:
         ivs = [b'\0\0\0\0\0\0\0\0']
